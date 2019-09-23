@@ -1,0 +1,93 @@
+{% extends "menu.html" %}
+{% load staticfiles %}
+
+
+{% block title %}
+Already Sold
+{% endblock %}
+
+{% block csslink %}
+<!-- Custom styles for this page -->
+<link href="{% static "vendor/datatables/dataTables.bootstrap4.min.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+	<!-- Page Heading -->
+	<div class="mt-4 mb-2 mr-2 ml-2">
+		<h1 class="h3 mb-0 text-gray-800">Đã bán</h1>
+		<p class="mb-1">這裡是賣掉的</p>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12 mt-4">
+
+			<div class="card shadow mb-4">
+				<div class="card-header py-3">
+					<h6 class="m-0 font-weight-bold text-primary">Table</h6>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+							<thead>
+								<tr>
+									<th>MA HANG</th>
+									<th>A/Q</th>
+									<th>MAU</th>
+									<th>Size</th>
+									<th>Ngày bán</th>
+									<th>Thư ký</th>
+									<th>Giá</th>
+									<th>Số lượng</th>
+									<th>Điện thoại</th>
+									<th>Nhận xét</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>product_id</th>
+									<th>type_of</th>
+									<th>color</th>
+									<th>size</th>
+									<th>sale date</th>
+									<th>clerk</th>
+									<th>sell price</th>
+									<th>count</th>
+									<th>customer</th>
+									<th>remarks</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								{% for product in sold_products %}
+									<tr>
+										{% for i in product %}
+											{% if i == -1487 %}
+												<td></td>
+											{% else %}
+												<td>{{ i | default_if_none:"" }}</td>
+											{% endif %}
+										{% endfor %}
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</div>
+{% endblock %}
+
+{% block tailjslink %}
+<!-- Page level plugins -->
+<script src="{% static "vendor/datatables/jquery.dataTables.min.js" %}"></script>
+<script src="{% static "vendor/datatables/dataTables.bootstrap4.min.js" %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static "js/demo/datatables-demo.js" %}"></script>
+{% endblock %}

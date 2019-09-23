@@ -1,0 +1,375 @@
+{% extends "menu.html" %}
+{% load staticfiles %}
+
+
+{% block title %}
+Sold
+{% endblock %}
+
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+	<!-- Page Heading -->
+	<div class="mt-4 mb-2 mr-2 ml-2">
+		<h1 class="h3 mb-0 text-gray-800">Today</h1>
+		<p class="mb-1">今天賣出的表單</p>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card shadow mb-4 mt-4">
+				<div class="card-header py-3">
+					<h6 class="m-0 font-weight-bold text-primary">Hình thức bán hàng</h6>
+				</div>
+				<!-- 表單內容 -->
+
+				<script>
+					$(function () {
+						var Product = [
+						{% for n in product_ids %}
+							"{{ n }}",
+						{% endfor %}
+						];
+						var Customer = [
+						{% for n in customer %}
+							"{{ n.phone_number }}",
+						{% endfor %}
+						];
+						$("#inputproduct").typeahead({
+							source: Product
+						});
+						$("#input_phone").typeahead({
+							source: Customer
+						});
+					});
+				</script>
+
+				<div class="card-body">
+					<form class="validate-form" method="POST">
+						{% csrf_token %}
+						<div class="form-group row ">
+							<label class="col-sm-1 col-form-label text-gray-900 text-lg">商品</label>
+							<!-- max='618107190088-1' -->
+							<div id="div_pdt" class="col-sm-auto">
+								<input type="text" name="product" id="inputproduct" class="form-control"
+									placeholder="MA HANG">
+							</div>
+							<div id="div_color" class="col-sm-2">
+							<!-- max = '18690'=>'BI TRANG DEN' -->
+								<select name="color" id="inputcolor" class="form-control text-gray-500" disabled>
+									<option>MAU</option>
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<select name="size" id="inputsize" class="form-control text-gray-500" disabled>
+									<option>size</option>
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<select name="count" id="inputcount" class="form-control text-gray-500" disabled>
+									<option>count</option>
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<input type="number" name="price" id="inputprice" class="form-control" placeholder="GIA">
+							</div>
+						</div>
+						<div class="row">
+							<label for="input_clerk" class="col-sm-1 col-form-label text-gray-900 text-lg">店員</label>
+							<div class="col">
+								<select name="clerk" id="input_clerk" class="col form-control">
+									{% for n in clerk %}
+									<option>{{ n.clerk_name }}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">客人電話</label>
+							<div class="col">
+								<input type="tel" name="phone" id="input_phone" class="form-control">
+							</div>
+							<div class="col-sm-auto offset-sm-2">
+								<button type="reset" class="btn btn-secondary">Clear</button>
+							</div>
+							<div class="col-sm-auto">
+								<input type="submit" name="submit" class="btn btn-primary" value="Submit">
+							</div>
+						</div>
+
+
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card shadow mb-4">
+				<!-- Card 標題-->
+				<div class="card-header py-3 ">
+					<h6 class="m-0 font-weight-bold text-primary">Ghi lại</h6>
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+						aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Card 內容 -->
+				<div class="card-body">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">MA HANG</th>
+								<th scope="col">kích thước</th>
+								<th scope="col">Màu</th>
+								<th scope="col">Số lượng</th>
+								<th scope="col">Tổng giá bán</th>
+								<th scope="col">Điện thoại</th>
+								<th scope="col">店員</th>
+								<th scope="col" class="text-danger" style="width: 3rem;">Xóa</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							{% for n,i in record %}
+							<tr>
+								<td>{{ n }}</td>
+								<td>{{ i.product }}</td>
+								<td>{{ i.product.size }}</td>
+								<td>{{ i.product.color | default_if_none:"" }}</td>
+								<td>{{ i.sell_count }}</td>
+								<td>{{ i.sell_price | default_if_none:"" }}</td>
+								<td>{{ i.customer | default_if_none:"" }}</td>
+								<td>{{ i.clerk }}</td>
+								<td><a href="" name={{ n }} class="delete btn btn-danger btn-circle"><i class="fas fa-trash"></i></a></td>
+							</tr>
+							{% endfor %}
+
+						</tbody>
+
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+
+		<!-- Earnings (Monthly) Card Example -->
+		<div class="col-xl-3 col-md-6 mt-4 mb-2">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">總數 (件)</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">{{ rcd_length }}</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-check fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Earnings (Monthly) Card Example -->
+		<div class="col-xl-3 col-md-6 mt-4 mb-2">
+			<div class="card border-left-success shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+								總金額 (K)</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">${{ rcd_money }}</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xl-3 col-md-6 mt-4 mb-2">
+			<a href="#" class="btn btn-primary btn-icon-split" style="position: absolute; bottom: 0;">
+				<span class="icon text-white-50">
+					<i class="fas fa-arrow-right"></i>
+				</span>
+				<span class="text">確認送出</span>
+			</a>
+		</div>
+	</div>
+
+</div>
+
+<script>$.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});</script>
+<script>
+/*=====================[ Validate ]=====================*/
+	let $inputs = $('form .form-control');
+
+	$('.validate-form').on('submit', function (e) {
+
+		$inputs.each(function () {
+			let $input = $(this);
+			console.log($input);
+			if ($input .val() == "") {
+				if ($input.attr('name') != 'phone' && $input.attr('name') != 'clerk') {
+					alert($input.attr('placeholder') + '不能不填!');
+					e.preventDefault();
+					return false;
+				}
+			}
+		});
+
+		return true;
+	});
+
+	$('.validate-form').on('reset', function () {
+		$('select:not(#input_clerk)  option').remove();
+		$("<option></option>").text('MAU').appendTo('#inputcolor');
+		$("<option></option>").text('size').appendTo('#inputsize');
+		$("<option></option>").text('count').appendTo('#inputcount');
+		$('select:not(#input_clerk)').attr("disabled","true");
+    });
+
+	$('.delete').click(function (e) {
+		var check = confirm("確定刪除嗎?");
+		if (check) {
+			let $input = $(this);
+			$.ajax({
+				type: "POST",
+				data: {
+					number: $input.attr('name')
+				},
+				url: "{% url 'sold_today' %}",
+				cache: false,
+				dataType: "json",
+				async: false,
+			});
+		}else{
+			e.preventDefault();
+			return false;
+		}
+
+		return true;
+	})
+
+	$('#inputproduct').on("input blur focus",function(){
+		$.ajax({
+			type: "POST",
+			data: {
+				product: $("#inputproduct").val(),
+				type: "product"
+			},
+			url: "{% url 'sold_today' %}",
+			cache: false,
+			dataType: "json",
+			async: false,
+			success: function (result) {
+				$('select:not(#input_clerk)').attr("disabled","true");
+				if ($("#div_pdt").attr("class") == 'col-sm-2' || $("#div_color").attr("class") == 'col-sm-3') {
+					$("#div_pdt").attr("class", 'col-sm-auto');
+					$("#div_color").attr("class", 'col-sm-2');
+				}
+				if (result.repeat.length != 0) {
+					$("#inputcolor option").remove();
+					let color = $("#inputcolor");
+					for(i = 0; i < result.repeat.length; i++){
+						$("<option></option>").text(result.repeat[i]).appendTo(color);
+						if (result.repeat[i].length > 9 && $("#div_pdt").attr("class") == 'col-sm-auto') {
+							$("#div_pdt").attr("class", 'col-sm-2');
+							$("#div_color").attr("class", 'col-sm-3');
+						}
+					}
+					$('#inputcolor').removeAttr("disabled").removeClass('text-gray-500');
+					colordate();
+					sizedate();
+				}
+			},
+		});
+	})
+
+	$('#inputcolor').change(function () {
+		colordate();
+		sizedate();
+	})
+	$('#inputsize').change(function () {
+		sizedate();
+	})
+
+	function colordate() {
+		$.ajax({
+			type: "POST",
+			data: {
+				product: $("#inputproduct").val(),
+				color: $("#inputcolor :selected").text(),
+				type: "color"
+			},
+			url: "{% url 'sold_today' %}",
+			cache: false,
+			dataType: "json",
+			async: false,
+			success: function (result) {
+				$('#inputsize').attr("disabled","true");
+				if (result.repeat.length != 0) {
+					$("#inputsize option").remove();
+					let size = $("#inputsize");
+					for(i = 0; i < result.repeat.length; i++){
+						$("<option></option>").text(result.repeat[i]).appendTo(size);
+					}
+					$('#inputsize').removeAttr("disabled").removeClass('text-gray-500');
+					sizedate()
+				} else {
+					alert('沒找到商品2');
+				}
+			},
+		});
+
+	}
+
+	function sizedate() {
+		$.ajax({
+			type: "POST",
+			data: {
+				product: $("#inputproduct").val(),
+				color: $("#inputcolor :selected").text(),
+				size:  $("#inputsize :selected").text(),
+				type: "count"
+			},
+			url: "{% url 'sold_today' %}",
+			cache: false,
+			dataType: "json",
+			async: false,
+			success: function (result) {
+				$('#inputcount').attr("disabled","true");
+				if (result.repeat.length != 0) {
+					$("#inputcount option").remove();
+					let count = $("#inputcount");
+					console.log(result.repeat)
+					for(i = 0; i < result.repeat; i++){
+						$("<option></option>").text(i+1).appendTo(count);
+					}
+					$('#inputcount').removeAttr("disabled").removeClass('text-gray-500');
+				} else {
+					alert('沒找到商品3');
+				}
+			},
+		});
+	}
+
+</script>
+{% endblock %}
+
+{% block tailjslink %}
+<script src="{% static "vendor/bootstrap/js/bootstrap3-typeahead.min.js" %}"></script>
+{% endblock %}
