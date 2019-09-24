@@ -97,6 +97,14 @@ def add_products(tables):
 				continue
 			if product_flag:
 				
+
+
+					if date_text:
+
+
+				if add_date:
+					product_dict['add_date'] = add_date
+
 			for col in range(6, 18):
 				if col != 7 and table.cell(row, col).ctype == 2 :
 					product_dict['size'] = col+17
@@ -134,32 +142,19 @@ def get_date(cell):
 		return ""
 	elif cell.ctype == 3:
 		date = datetime(*xldate_as_tuple(cell.value, 1))
-		return = date.strftime('%Y-%d-%m')
+		return date.strftime('%Y-%d-%m')
 	else:
-		all_leng = len(cell.value)
-		date = cell.value.replace('/', '-')
-		if re.match('^\d{4}-\d{1,2}-\d{1,2}', date):
-			span = re.match('^\d{4}-\d{1,2}-\d{1,2}', date).span()
-			date = date.split('-',2)
-			return date[span[0]:span[1]]
-		elif re.match('^\d{1,2}-\d{1,2}-\d{4}', date):
-			span = re.match('^\d{1,2}-\d{1,2}-\d{4}', date).span()
-			date = date[span[0]:span[1]]
-			date = date.split('-',2)
-			return date[2] + '-' + date[1] + '-' + date[0]
-		elif re.match('^\d{1,2}-\d{1,2}', date):
-			span = re.match('^\d{1,2}-\d{1,2}', date).span()
-			date = date.split('-',2)
-			return '0000-' + date[1] + '-' + date[0]
-		else :
-			print(cell.value)
-			
-		date_leng = len(add_date)
-		if date_leng > all_leng :
-			print('bububu', date)
+		date = re.findall('\d{1,5}', cell.value)
+		date_text = re.findall('[a-zA-Z]{1,}', cell.value)
 
-	if cell:
-		product_dict['add_date'] = cell
+		if len(date) == 3:
+			if len(date[0]) == 4:
+				return date[0] + '-' + date[1] + '-' + date[2]
+			else:
+				return date[2] + '-' + date[1] + '-' + date[0]
+		elif len(date) == 2:
+			return '0000-' + date[1] + '-' + date[0]
+
 
 def data_process(cell):
 	if cell.ctype == 0 or cell.value == ' ':

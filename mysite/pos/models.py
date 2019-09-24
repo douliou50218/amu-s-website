@@ -43,9 +43,8 @@ class All_Product(models.Model):
         max_length=50,
         null=True,
     )
-    add_date = models.CharField(
-        max_length=20,
-        default=datetime.date.today().strftime("%Y/%m/%d"),
+    add_date = models.DateField(
+        default=datetime.date.today().strftime("%Y-%m-%d"),
         null=True,
         )
     size =models.IntegerField(
@@ -75,15 +74,18 @@ class Sales_Record(models.Model):
         null=True,
     )
     sell_price = models.IntegerField(default=-9999)
-    sale_date = models.CharField(
-        max_length=20,
-        default=datetime.date.today().strftime("%Y/%m/%d"),
+    sale_date = models.DateField(
+        default=datetime.date.today().strftime("%Y-%m-%d"),
         null=True,
         )
     clerk = models.ForeignKey(
         Clerk,
         models.PROTECT,
         null=True,
+    )
+    remark = models.CharField(
+        max_length=1000,
+        blank=True,
     )
 
 
@@ -102,4 +104,8 @@ class TodayRecord(models.Model):
     clerk = models.ForeignKey(
         Clerk,
         models.PROTECT,
+    )
+    remark = models.CharField(
+        max_length=1000,
+        blank=True,
     )
