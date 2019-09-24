@@ -34,8 +34,6 @@ def add_products(tables):
 					product_dict['product_id'] = table.cell(row, 0).value
 				product_dict['type_of'] = replace_n(table.cell(row, 1).value)
 				product_dict['color'] = get_color(table.cell(row, 2).value)
-				# if table.cell(row, 1).ctype == 2 or table.cell(row, 2).ctype == 2 :
-				# 	print(table,"種類或顏色是數字!",row+1)
 				product_dict['price'] = int(get_price(table.cell(row, 3)))
 			if table.cell(row, 4).ctype != 0 and table.cell(row, 4).value != 'TONG' and table.cell(row, 4).value != '`':
 				if not remark:
@@ -50,60 +48,11 @@ def add_products(tables):
 					product_flag = False
 				continue
 			if product_flag:
-				product_dict['add_date'] = data_process(table.cell(row, 5))
-			for col in range(6, 18):
-				if col != 7 and table.cell(row, col).ctype == 2 :
-					product_dict['size'] = col+17
-					find_flag = False
-					for product in product_list:
-						if product['size']==product_dict['size']:
-							product['quantity'] += int(table.cell(row, col).value)
-							find_flag = True
-							break
-					if find_flag:
-						continue
-					product_dict['quantity'] = int(table.cell(row, col).value)
-					product_list.append(product_dict.copy())
-	return all_product
-#新的
-def add_products(tables):
-	all_product = []
-	for table in tables:
-		product_flag = False
-		for row in range(4, table.nrows):
-			if table.cell(row, 0).ctype != 0:
-				product_flag = True
-				product_list = []
-				product_dict = {}
-				remark=''
-				if table.cell(row, 0).ctype == 2:
-					product_dict['product_id'] =str(int(table.cell(row, 0).value))
-				else:
-					product_dict['product_id'] = table.cell(row, 0).value
-				product_dict['type_of'] = replace_n(table.cell(row, 1).value)
-				product_dict['color'] = get_color(table.cell(row, 2).value)
-				product_dict['price'] = int(get_price(table.cell(row, 3)))
-			if table.cell(row, 4).ctype != 0 and table.cell(row, 4).value != 'TONG' and table.cell(row, 4).value != '`':
-				if not remark:
-					remark = data_process(table.cell(row, 4))
-				else:
-					remark += ',' + data_process(table.cell(row, 4))
-			if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY' :
-				if product_flag:
-					for i in product_list:
-						i['remarks'] = remark
-						all_product.append(i)
-					product_flag = False
-				continue
-			if product_flag:
-				
+				if get_date(table.cell(row, 5)):
+					product_dict['add_date'] = get_date(table.cell(row, 5))
 
+				#if date_text:
 
-					if date_text:
-
-
-				if add_date:
-					product_dict['add_date'] = add_date
 
 			for col in range(6, 18):
 				if col != 7 and table.cell(row, col).ctype == 2 :
