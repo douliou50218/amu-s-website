@@ -1,9 +1,10 @@
 import xlrd
 from datetime import datetime
 from xlrd import xldate_as_tuple
+import re
 
 def get_file():
-	data = xlrd.open_workbook(r'C:\Users\32bit\Desktop\BANG TON KHO th6-2019.xlsx')
+	data = xlrd.open_workbook(r'E:\BANG TON KHO th6-2019.xlsx')
 	tables = []
 	for i in range(0,10):
 		tables.append(data.sheet_by_name(f"{i}"))
@@ -95,24 +96,7 @@ def add_products(tables):
 					product_flag = False
 				continue
 			if product_flag:
-				if table.cell(row, 5).ctype == 0
-					cell = ""
-				elif ctype == 3:
-                    date = datetime(*xldate_as_tuple(cell, 5))
-					cell = date.strftime('%Y-%d-%m')
-				else:
-					date = table.cell(row, 5).replace('/', '-')
-					if re.match('^\d{4}-\d{1,2}-\d{1,2}', date):
-						span = re.match('^\d{4}-\d{1,2}-\d{1,2}', date).span()
-						cell = date[span[0]:span[1]]
-					elif re.match('^\d{1,2}-\d{1,2}-\d{4}', date):
-						span = re.match('^\d{1,2}-\d{1,2}-\d{4}', date).span()
-						date = date[span[0]:span[1]]
-						date = date.split('-',2)
-						cell = date[2] + '-' + date[1] + date[0]
-					product_dict[''] = 
-				if cell:
-					product_dict['add_date'] = cell
+				
 			for col in range(6, 18):
 				if col != 7 and table.cell(row, col).ctype == 2 :
 					product_dict['size'] = col+17
@@ -145,6 +129,37 @@ def sold_products(tables):
 						sold_product.append(product_dict.copy())
 	return sold_product
 
+def get_date(cell):
+	if cell.ctype == 0:
+		return ""
+	elif cell.ctype == 3:
+		date = datetime(*xldate_as_tuple(cell.value, 1))
+		return = date.strftime('%Y-%d-%m')
+	else:
+		all_leng = len(cell.value)
+		date = cell.value.replace('/', '-')
+		if re.match('^\d{4}-\d{1,2}-\d{1,2}', date):
+			span = re.match('^\d{4}-\d{1,2}-\d{1,2}', date).span()
+			date = date.split('-',2)
+			return date[span[0]:span[1]]
+		elif re.match('^\d{1,2}-\d{1,2}-\d{4}', date):
+			span = re.match('^\d{1,2}-\d{1,2}-\d{4}', date).span()
+			date = date[span[0]:span[1]]
+			date = date.split('-',2)
+			return date[2] + '-' + date[1] + '-' + date[0]
+		elif re.match('^\d{1,2}-\d{1,2}', date):
+			span = re.match('^\d{1,2}-\d{1,2}', date).span()
+			date = date.split('-',2)
+			return '0000-' + date[1] + '-' + date[0]
+		else :
+			print(cell.value)
+			
+		date_leng = len(add_date)
+		if date_leng > all_leng :
+			print('bububu', date)
+
+	if cell:
+		product_dict['add_date'] = cell
 
 def data_process(cell):
 	if cell.ctype == 0 or cell.value == ' ':

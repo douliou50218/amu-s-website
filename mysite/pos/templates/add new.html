@@ -12,11 +12,11 @@
 
 	<!-- Page Heading -->
 	<div class="mt-4 mb-2 mr-2 ml-2">
-		<h1 class="h3 mb-0 text-gray-800">新增</h1>
+		<h1 class="h3 mb-0 text-gray-800">添加</h1>
 		<p class="mb-1">新增東西</p>
 	</div>
 
-	
+
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="card shadow mb-4 mt-4">
@@ -37,12 +37,16 @@
 						</div>
 						<div id="" class="col">
 							<label for="type" class="text-gray-900">種類</label>
-							<select name="type" id="input_type" class="form-control">
+							<div class="row col">
+							<select name="type" id="input_type" class="col-sm-10 form-control">
 								{% for n in type_of %}
 								<option>{{ n.type_of }}</option>
 								{% endfor %}
 							</select>
+							<a class="col-sm-1 related-widget-wrapper-link add-related" id="add_id_type_of" href="/admin/pos/typeof/add/?_to_field=type_of&amp;_popup=1" title="新增其它 type of"><img src="/static/admin/img/icon-addlink.svg" alt="新增"></a>
+							</div>
 						</div>
+
 						<div id="div_color" class="col">
 						<!-- max = '18690'=>'BI TRANG DEN' -->
 							<label for="type" class="text-gray-900">顏色</label>
@@ -52,39 +56,9 @@
 							<label for="type" class="text-gray-900">單價</label>
 							<input type="number" name="price" id="inputprice" class="form-control" placeholder="GIA">
 						</div>
-					</div>
-					<div id="size" class="row">
 						<div class="col">
-							<label for="type" class="text-gray-900">F size</label>
-							<select name="size" id="inputcount" class="form-control">
-								<script>
-									let count = $("#inputcount");
-									for(i = 0; i < 11; i++){
-										$("<option></option>").text(i).appendTo(count);
-									}
-								</script>
-							</select>
-						</div>
-						<script>
-							//let name = Array("XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL");
-							let name = ["XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL"];
-							for(i = 25; i < 35; i++){
-								let div = $("#size");
-								$(div).append('<div id="size'+ i +'" class="col"></div>');
-								let size = $("#size"+ i);
-								$(size).append('<label for="type" class="text-gray-900">'+ i + '</label>');
-								let text = name[i-25];
-								$(size).append('<label for="type" class="text-gray-900">'+ text + '</label>');
-								$(size).append('<select name="size" id="inputsize'+ i +'" class="form-control">');
-								let count = $("#inputsize" + i);
-								for(j = 0; j < 11; j++){
-									$("<option></option>").text(j).appendTo(count);
-								}
-							}
-						</script>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".type_add">Small modal</button>
-						<div class="col-sm-auto">
-							<input type="submit" name="submit" class="btn btn-primary" value="Submit">
+							<label for="type" class="text-gray-900">日期</label>
+							<input type="number" name="price" id="inputprice" class="form-control" placeholder="GIA">
 						</div>
 					</div>
 
@@ -107,6 +81,42 @@
 							</div>
 						</div>
 					</div>
+
+					<div id="size" class="row">
+						
+						<script>
+							let name = [" _ XS", " _ S", " _ M", " _ L", " _ XL", " _ XXL", " _ 3XL", " _ 4XL", " _ 5XL", " _ 6XL"]
+							for(i = 24; i < 35; i++){
+								if (i == 24){
+									let div = $("#size");
+									$(div).append('<div id="size'+ 23 +'" class="col text-center"></div>');
+									let size = $("#size"+ 23);
+									$(size).append('<label for="type" class="text-gray-900">F size</label>');
+									$(size).append('<select name="size" id="inputsize'+ 23 +'" class="form-control">');
+									let count = $("#inputsize" + 23);
+									for(j = 0; j < 11; j++){
+										$("<option></option>").text(j).appendTo(count);
+									}
+								}else {
+									let div = $("#size");
+									$(div).append('<div id="size'+ i +'" class="col text-center"></div>');
+									let size = $("#size"+ i);
+									$(size).append('<label for="type" class="text-gray-900">'+ i + '</label>');
+									let text = name[i-25];
+									$(size).append('<label for="type" class="text-gray-900">'+ text + '</label>');
+									$(size).append('<select name="size" id="inputsize'+ i +'" class="form-control">');
+									let count = $("#inputsize" + i);
+									for(j = 0; j < 11; j++){
+										$("<option></option>").text(j).appendTo(count);
+									}
+								}
+							}
+						</script>
+						<div class="col-sm-auto">
+							<input type="submit" name="submit" class="btn btn-primary" value="Submit">
+						</div>
+					</div>
+
 				</form>
 
 				</div>
