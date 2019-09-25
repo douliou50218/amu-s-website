@@ -50,8 +50,18 @@ def add_products(tables):
 			if product_flag:
 				if get_date(table.cell(row, 5)):
 					product_dict['add_date'] = get_date(table.cell(row, 5))
-
-				#if date_text:
+				if table.cell(row, 5).ctype == 3:
+					#這句有問題
+					date_text = re.findall('[a-zA-Z]{1,}', table.cell(row, 5).value)
+					if date_text:
+						if not remark:
+							remark = ''
+							for i in date_text:
+								remark += data_process(table.cell(row, 4)) + ' '
+						else:
+							remark += ','
+							for i in date_text:
+								remark += data_process(table.cell(row, 4)) + ' '
 
 
 			for col in range(6, 18):
@@ -78,7 +88,8 @@ def sold_products(tables):
 				product_flag = False
 				continue
 			if product_flag:
-				product_dict['sold_date'] = data_process(table.cell(row, 19))
+				product_dict['sold_date'] = get_date(table.cell(row, 19))
+
 				for col in range(20, 32):
 					if col != 21 and table.cell(row, col).ctype == 2 :
 						product_dict['size'] = col+3
@@ -90,11 +101,10 @@ def get_date(cell):
 	if cell.ctype == 0:
 		return ""
 	elif cell.ctype == 3:
-		date = datetime(*xldate_as_tuple(cell.value, 1))
-		return date.strftime('%Y-%d-%m')
+		date = datetime(*xldate_as_tuple(cell.value, 0))
+		return date.strftime('%Y-%m-%d')
 	else:
 		date = re.findall('\d{1,5}', cell.value)
-		date_text = re.findall('[a-zA-Z]{1,}', cell.value)
 
 		if len(date) == 3:
 			if len(date[0]) == 4:
@@ -110,7 +120,7 @@ def data_process(cell):
 		pass
 	elif cell.ctype == 3 :
 		date = datetime(*xldate_as_tuple(cell.value, 0))
-		return date.strftime('%Y/%m/%d')
+		return date.strftime('%Y-%m-%d')
 	elif cell.ctype == 2 :
 		if cell.value*100 == int(cell.value*100):
 			return str(int(cell.value*100)) + '%'
