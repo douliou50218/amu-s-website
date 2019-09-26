@@ -1,2 +1,3 @@
 django
 line-bot-sdk
+xlrd==1.2.0
