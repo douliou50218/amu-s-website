@@ -25,7 +25,6 @@ def add_products(tables):
 		for row in range(4, table.nrows):
 			if table.cell(row, 0).ctype != 0:
 				product_flag = True
-				product_list = []
 				product_dict = {}
 				remark=''
 				if table.cell(row, 0).ctype == 2:
@@ -42,33 +41,20 @@ def add_products(tables):
 					remark += ',' + data_process(table.cell(row, 4))
 			if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY' :
 				if product_flag:
-					for i in product_list:
-						i['remarks'] = remark
-						all_product.append(i)
+					for i in all_product:
+						if i['product_id'] == product_dict['product_id']:
+							i['remarks'] = remark
 					product_flag = False
 				continue
 			if product_flag:
 				if get_date(table.cell(row, 5)):
 					product_dict['add_date'] = get_date(table.cell(row, 5))
-				if table.cell(row, 5).ctype == 3:
-					#這句有問題
-					date_text = re.findall('[a-zA-Z]{1,}', table.cell(row, 5).value)
-					if date_text:
-						if not remark:
-							remark = ''
-							for i in date_text:
-								remark += data_process(table.cell(row, 4)) + ' '
-						else:
-							remark += ','
-							for i in date_text:
-								remark += data_process(table.cell(row, 4)) + ' '
-
 
 			for col in range(6, 18):
 				if col != 7 and table.cell(row, col).ctype == 2 :
 					product_dict['size'] = col+17
 					product_dict['quantity'] = int(table.cell(row, col).value)
-					product_list.append(product_dict.copy())
+					all_product.append(product_dict.copy())
 	return all_product
 
 def sold_products(tables):
@@ -89,12 +75,30 @@ def sold_products(tables):
 				continue
 			if product_flag:
 				product_dict['sold_date'] = get_date(table.cell(row, 19))
+				if 'cause' in product_dict:
+					del product_dict['cause']
+				remark = ''
+
+				if table.cell(row, 19).ctype == 1:
+					date_text = re.findall('[a-zA-Z]{1,}', table.cell(row, 19).value)
+					if date_text:
+						if not remark:
+							remark = ''
+							for i in date_text:
+								remark += i + ' '
+						else:
+							remark += ','
+							for i in date_text:
+								remark += i + ' '
 
 				for col in range(20, 32):
 					if col != 21 and table.cell(row, col).ctype == 2 :
 						product_dict['size'] = col+3
 						product_dict['sell_count'] = int(table.cell(row, col).value)
+						if remark:
+							product_dict['cause'] = remark.strip()
 						sold_product.append(product_dict.copy())
+
 	return sold_product
 
 def get_date(cell):
@@ -112,7 +116,7 @@ def get_date(cell):
 			else:
 				return date[2] + '-' + date[1] + '-' + date[0]
 		elif len(date) == 2:
-			return '0000-' + date[1] + '-' + date[0]
+			return '1000-' + date[1] + '-' + date[0]
 
 
 def data_process(cell):

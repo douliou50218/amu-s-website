@@ -53,7 +53,7 @@ def storage(request):
 def already_sold(request):
     with connection.cursor() as c:
         c.execute('''SELECT
-                pap.product_id, pap.type_of_id, pap.color, pap.size, psr.sale_date, psr.clerk_id, psr.sell_price, psr.sell_count, psr.customer_id, pap.remarks
+                pap.product_id, pap.type_of_id, pap.color, pap.size, psr.sale_date, psr.clerk_id, pap.price, psr.sell_price, psr.sell_count, psr.customer_id, pap.remarks
             FROM pos_Sales_Record as psr
             JOIN pos_All_Product as pap on psr.product_id = pap.id''')
         sold_products = c.fetchall()

@@ -1,66 +1,16 @@
-for i in all_product[:2]:
+for i in all_product[:5]:
+    print(i)
+
+for i in sold_product[:5]:
     print(i)
 
 for i in all_product:
-	if i['product_id'] == '030-1':
+	if i['product_id'] == '2016':
 		print(i)
 
-def add_num(tables):
-	add_num = 0
-	for table in tables:
-		table_num = 0
-		for row in range(5, table.nrows):
-			if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY' :
-				table_num += int(table.cell(row, 18).value)
-		print(table_num)
-		add_num += table_num
-	return add_num
-def sold_num(tables):
-	sold_num = 0
-	for table in tables:
-		table_num = 0
-		for row in range(4, table.nrows):
-			for j in range(1,10):
-				if table.cell(row, j).value == 'TONG' or table.cell(row, j+1).value == 'NGAY' or table.cell(row, j+15).value == 'NGAY':
-					table_num += table.cell(row, j+28).value
-					break
-		print(table_num)
-		sold_num += table_num
-	return sold_num
-# 抓tables_2進出貨不對等的問題
-for i in range(0,10):
-	for row in range(4, tables_2[i].nrows):
-		if tables_2[i].cell(row, 0).ctype != 0:
-			find_flag = False
-			product_row = row
-			product_dict = {}
-			if tables_2[i].cell(row, 0).ctype == 2:
-				product_dict['product_id'] = int(tables_2[i].cell(row, 0).value)
-			else:
-				product_dict['product_id'] = tables_2[i].cell(row, 0).value
-		for j in range(1,10):
-			if tables_2[i].cell(row, j).value == 'TONG' :
-				product_dict['type_of'] = tables_2[i].cell(product_row, j-3).value
-				product_dict['color'] = tables_2[i].cell(product_row, j-2).value
-				if tables_2[i].cell(product_row, j-3).ctype == 2 or tables_2[i].cell(product_row, j-2).ctype == 2 :
-					print(tables_2[i],"種類或顏色是數字!",product_row+1,j)
-				price = tables_2[i].cell(product_row, j-1)
-				if price.ctype == 1:
-					price = price.value.replace('K', '')
-				elif price.ctype == 0:
-					price = 0
-				else:
-					price = price.value
-					product_dict['price'] = int(price)
-				if tables_2[i].cell(row, j+42).ctype == 0:
-					if tables_2[i].cell(row, j+41).value != 0:
-						num += tables_2[i].cell(row, j+41).value
-						print(i,row,product_dict,tables_2[i].cell(row, j+41).value)
-				elif tables_2[i].cell(row, j+42).value != 0:
-					num += tables_2[i].cell(row, j+42).value
-					print(i,row,product_dict,tables_2[i].cell(row, j+42).value)
-				break
-
+for i in sold_product:
+	if i['product_id'] == '173':
+		print(i)
 
 #-----------------------------------------------------------------
 from pos.models import *
@@ -74,6 +24,7 @@ for i in all_type:
 
 all_product = read.add_products(tables)
 
+#這裡重寫
 for i in all_product:
 	if i['type_of'] !='' :
 		All_Product.objects.create(product_id=i['product_id'],type_of=TypeOf.objects.get(type_of=i['type_of']),color=i['color'],add_date=i['add_date'],size=i['size'],price=i['price'],remarks=i['remarks'],quantity=i['quantity'])
@@ -158,38 +109,16 @@ for n in range(0,10):
 			break
 	print(table_num)
 	num+=table_num
-###
+
 num=0
 for i in all_product:
 	num += i['quantity']
 print(num)
-###
+
 num=0
 for i in sold_product:
 	num += i['sell_count']
 print(num)
-
-num=0
-product_num = []
-for table in tables:
-	product_flag = False
-	for row in range(4, table.nrows):
-			if table.cell(row, 0).ctype != 0:
-				product_flag = True
-				product_dict = {}
-				if table.cell(row, 0).ctype == 2:
-					product_dict['product_id'] =str(int(table.cell(row, 0).value))
-				else:
-					product_dict['product_id'] = table.cell(row, 0).value
-				product_dict['color'] = get_color(table.cell(row, 2).value)
-			if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY' :
-				if product_flag:
-					product_dict['num'] = table.cell(row, 46).value
-					product_num.append(product_dict.copy())
-					product_flag = False
-				continue
-print(num)
-
 
 for i in product_num:
 	aaa=0
@@ -198,7 +127,3 @@ for i in product_num:
 			aaa+=j['quantity']
 	if i['num'] != aaa:
 		print(i,aaa)
-
-for j in all_product:
-		if j['product_id'] == '1833':
-			print(j)
