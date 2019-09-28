@@ -34,27 +34,38 @@ def add_products(tables):
 				product_dict['type_of'] = replace_n(table.cell(row, 1).value)
 				product_dict['color'] = get_color(table.cell(row, 2).value)
 				product_dict['price'] = int(get_price(table.cell(row, 3)))
-			if table.cell(row, 4).ctype != 0 and table.cell(row, 4).value != 'TONG' and table.cell(row, 4).value != '`':
-				if not remark:
-					remark = data_process(table.cell(row, 4))
-				else:
-					remark += ',' + data_process(table.cell(row, 4))
-			if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY' :
-				if product_flag:
-					for i in all_product:
-						if i['product_id'] == product_dict['product_id']:
-							i['remarks'] = remark
-					product_flag = False
+
+				for i in range(0,100):
+					if table.cell(row, 4).ctype != 0 and table.cell(row, 4).value != 'TONG' and table.cell(row, 4).value != '`':
+						if not remark:
+							remark = data_process(table.cell(row, 4))
+						else:
+							remark += ',' + data_process(table.cell(row, 4))
+					elif table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY' :
+						break
+
+			if (table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY') and product_flag:
+				product_flag = False
 				continue
+
 			if product_flag:
+				date_text = ''
 				if get_date(table.cell(row, 5)):
 					product_dict['add_date'] = get_date(table.cell(row, 5))
+
+				if table.cell(row, 5).ctype == 1:
+					text = re.findall('[a-zA-Z]{1,}', table.cell(row, 5).value)
+					for i in text:
+						date_text += i + ' '
+
+				product_dict['remarks'] = remark + date_text.strip()
 
 			for col in range(6, 18):
 				if col != 7 and table.cell(row, col).ctype == 2 :
 					product_dict['size'] = col+17
 					product_dict['quantity'] = int(table.cell(row, col).value)
 					all_product.append(product_dict.copy())
+
 	return all_product
 
 def sold_products(tables):
