@@ -15,14 +15,13 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '=et-ibymfdll8z4dr806x^otzn#p9+p7xds9(z8bx3z@7h6kc='
 
-#line用的
+# line用的
 LINE_CHANNEL_ACCESS_TOKEN = 'aDAU1NzYVuwWYBMeioQVDm39/LtS6fFjbVJfpTYhv2iPI6soozmNT5aysbpOyqkb5w0NRGBKndylk5AZZKQRfjpm05FMcJyshxYHTokG/SVxLjWGH0gQnWmnMKxHV4NbOwPK2qBpLM1qfjb2HHLZmAdB04t89/1O/w1cDnyilFU='
 LINE_CHANNEL_SECRET = '34a3715a05b77b0e9c6ab0dba1ce7828'
 
@@ -74,7 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -84,7 +82,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -104,7 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -117,7 +113,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
