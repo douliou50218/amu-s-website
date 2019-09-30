@@ -21,10 +21,8 @@ def get_all_type(tables):
 def add_products(tables):
 	all_product = []
 	for table in tables:
-		product_flag = False
 		for row in range(4, table.nrows):
 			if table.cell(row, 0).ctype != 0:
-				product_flag = True
 				product_dict = {}
 				remark=''
 				if table.cell(row, 0).ctype == 2:
@@ -34,26 +32,34 @@ def add_products(tables):
 				product_dict['type_of'] = replace_n(table.cell(row, 1).value)
 				product_dict['color'] = get_color(table.cell(row, 2).value)
 				product_dict['price'] = int(get_price(table.cell(row, 3)))
-			if table.cell(row, 4).ctype != 0 and table.cell(row, 4).value != 'TONG' and table.cell(row, 4).value != '`':
-				if not remark:
-					remark = data_process(table.cell(row, 4))
-				else:
-					remark += ',' + data_process(table.cell(row, 4))
+
+				remark = ''
+				for i in range(1,100):
+					if table.cell(row+i, 4).ctype != 0 and table.cell(row+i, 4).value != 'TONG' and table.cell(row+i, 4).value != '`':
+						if not remark:
+							remark = data_process(table.cell(row+i, 4))
+						else:
+							remark += ',' + data_process(table.cell(row+i, 4))
+					elif table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY' :
+						break
+
 			if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY' :
-				if product_flag:
-					for i in all_product:
-						if i['product_id'] == product_dict['product_id']:
-							i['remarks'] = remark
-					product_flag = False
 				continue
-			if product_flag:
-				if get_date(table.cell(row, 5)):
-					product_dict['add_date'] = get_date(table.cell(row, 5))
+
+			date_text = ''
+			if get_date(table.cell(row, 5)):
+				product_dict['add_date'] = get_date(table.cell(row, 5))
+				if table.cell(row, 5).ctype = 1:
+					date_texts = re.findall('[a-zA-Z]{1,}', table.cell(row, 5).value)
+					if date_texts:
+						for i in date_texts:
+							date_text += i
 
 			for col in range(6, 18):
 				if col != 7 and table.cell(row, col).ctype == 2 :
 					product_dict['size'] = col+17
 					product_dict['quantity'] = int(table.cell(row, col).value)
+					product_dict['remarks'] = remark + date_text
 					all_product.append(product_dict.copy())
 	return all_product
 
