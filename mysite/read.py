@@ -38,19 +38,15 @@ def add_products(tables):
                 product_dict['price'] = int(get_price(table.cell(row, 3)))
 
                 remark = ''
-                for i in range(1, 100):
-                    if table.cell(row + i, 4).ctype != 0 and table.cell(row + i, 4).value != 'TONG' and table.cell(
-                            row + i, 4).value != '`':
-                        if not remark:
-                            remark = data_process(table.cell(row + i, 4))
-                        else:
-                            remark += ',' + data_process(table.cell(row + i, 4))
-                    elif table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row,
-                                                                                                                19).value == 'NGAY':
-                        break
+                i = 0
+                while not (table.cell(row + i, 4).value == 'TONG' or table.cell(row + i, 5).value == 'NGAY' or table.cell(row + i, 19).value == 'NGAY'):
+                    if not remark:
+                        remark = data_process(table.cell(row + i, 4))
+                    elif remark and data_process(table.cell(row + i, 4)):
+                        remark += ',' + data_process(table.cell(row + i, 4))
+                    i += 1
 
-            if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row,
-                                                                                                      19).value == 'NGAY':
+            if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY':
                 continue
 
             date_text = ''
@@ -58,15 +54,20 @@ def add_products(tables):
                 product_dict['add_date'] = get_date(table.cell(row, 5))
                 if table.cell(row, 5).ctype == 1:
                     date_texts = re.findall('[a-zA-Z]+', table.cell(row, 5).value)
-                    if date_texts:
-                        for i in date_texts:
-                            date_text += i
+                    print(product_dict['product_id'])
+                    for i in date_texts:
+                        date_text += i + ' '
 
             for col in range(6, 18):
                 if col != 7 and table.cell(row, col).ctype == 2:
                     product_dict['size'] = col + 17
                     product_dict['quantity'] = int(table.cell(row, col).value)
-                    product_dict['remarks'] = remark + date_text
+                    if remark and date_text:
+                        product_dict['remarks'] = remark + ',' + date_text.strip()
+                    elif remark:
+                        product_dict['remarks'] = remark
+                    else:
+                        product_dict['remarks'] = date_text.strip()
                     all_product.append(product_dict.copy())
     return all_product
 
@@ -84,10 +85,11 @@ def sold_products(tables):
                 else:
                     product_dict['product_id'] = table.cell(row, 0).value
                 product_dict['color'] = get_color(table.cell(row, 2).value)
-            if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row,
-                                                                                                      19).value == 'NGAY':
+
+            if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY':
                 product_flag = False
                 continue
+
             if product_flag:
                 product_dict['sold_date'] = get_date(table.cell(row, 19))
                 if 'cause' in product_dict:
@@ -137,7 +139,7 @@ def get_date(cell):
 
 def data_process(cell):
     if cell.ctype == 0 or cell.value == ' ':
-        pass
+        return ''
     elif cell.ctype == 3:
         date = datetime(*xldate_as_tuple(cell.value, 0))
         return date.strftime('%Y-%m-%d')
