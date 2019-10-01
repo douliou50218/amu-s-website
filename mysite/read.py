@@ -3,20 +3,23 @@ from datetime import datetime
 from xlrd import xldate_as_tuple
 import re
 
+
 def get_file():
-	data = xlrd.open_workbook(r'E:\BANG TON KHO th6-2019.xlsx')
-	tables = []
-	for i in range(0,10):
-		tables.append(data.sheet_by_name(f"{i}"))
-	return tables
+    data = xlrd.open_workbook(r'E:\BANG TON KHO th6-2019.xlsx')
+    tables = []
+    for i in range(0, 10):
+        tables.append(data.sheet_by_name(f"{i}"))
+    return tables
+
 
 def get_all_type(tables):
-	all_type = set()
-	for table in tables:
-		for row in range(4, table.nrows):
-			if table.cell(row, 1).ctype != 0:
-				all_type.add(replace_n(table.cell(row, 1).value))
-	return all_type
+    all_type = set()
+    for table in tables:
+        for row in range(4, table.nrows):
+            if table.cell(row, 1).ctype != 0:
+                all_type.add(replace_n(table.cell(row, 1).value))
+    return all_type
+
 
 def add_products(tables):
 	all_product = []
@@ -64,94 +67,99 @@ def add_products(tables):
 	return all_product
 
 def sold_products(tables):
-	sold_product = []
-	for table in tables:
-		product_flag = False
-		for row in range(4, table.nrows):
-			if table.cell(row, 0).ctype != 0:
-				product_flag = True
-				product_dict = {}
-				if table.cell(row, 0).ctype == 2:
-					product_dict['product_id'] =str(int(table.cell(row, 0).value))
-				else:
-					product_dict['product_id'] = table.cell(row, 0).value
-				product_dict['color'] = get_color(table.cell(row, 2).value)
-			if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY' :
-				product_flag = False
-				continue
-			if product_flag:
-				product_dict['sold_date'] = get_date(table.cell(row, 19))
-				if 'cause' in product_dict:
-					del product_dict['cause']
-				remark = ''
+    sold_product = []
+    for table in tables:
+        product_flag = False
+        for row in range(4, table.nrows):
+            if table.cell(row, 0).ctype != 0:
+                product_flag = True
+                product_dict = {}
+                if table.cell(row, 0).ctype == 2:
+                    product_dict['product_id'] = str(int(table.cell(row, 0).value))
+                else:
+                    product_dict['product_id'] = table.cell(row, 0).value
+                product_dict['color'] = get_color(table.cell(row, 2).value)
+            if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row,
+                                                                                                      19).value == 'NGAY':
+                product_flag = False
+                continue
+            if product_flag:
+                product_dict['sold_date'] = get_date(table.cell(row, 19))
+                if 'cause' in product_dict:
+                    del product_dict['cause']
+                remark = ''
 
-				if table.cell(row, 19).ctype == 1:
-					date_text = re.findall('[a-zA-Z]{1,}', table.cell(row, 19).value)
-					if date_text:
-						if not remark:
-							remark = ''
-							for i in date_text:
-								remark += i + ' '
-						else:
-							remark += ','
-							for i in date_text:
-								remark += i + ' '
+                if table.cell(row, 19).ctype == 1:
+                    date_text = re.findall('[a-zA-Z]+', table.cell(row, 19).value)
+                    if date_text:
+                        if not remark:
+                            remark = ''
+                            for i in date_text:
+                                remark += i + ' '
+                        else:
+                            remark += ','
+                            for i in date_text:
+                                remark += i + ' '
 
-				for col in range(20, 32):
-					if col != 21 and table.cell(row, col).ctype == 2 :
-						product_dict['size'] = col+3
-						product_dict['sell_count'] = int(table.cell(row, col).value)
-						if remark:
-							product_dict['cause'] = remark.strip()
-						sold_product.append(product_dict.copy())
+                for col in range(20, 32):
+                    if col != 21 and table.cell(row, col).ctype == 2:
+                        product_dict['size'] = col + 3
+                        product_dict['sell_count'] = int(table.cell(row, col).value)
+                        if remark:
+                            product_dict['cause'] = remark.strip()
+                        sold_product.append(product_dict.copy())
 
-	return sold_product
+    return sold_product
+
 
 def get_date(cell):
-	if cell.ctype == 0:
-		return ""
-	elif cell.ctype == 3:
-		date = datetime(*xldate_as_tuple(cell.value, 0))
-		return date.strftime('%Y-%m-%d')
-	else:
-		date = re.findall('\d{1,5}', cell.value)
+    if cell.ctype == 0:
+        return ""
+    elif cell.ctype == 3:
+        date = datetime(*xldate_as_tuple(cell.value, 0))
+        return date.strftime('%Y-%m-%d')
+    else:
+        date = re.findall(r'\d{1,5}', cell.value)
 
-		if len(date) == 3:
-			if len(date[0]) == 4:
-				return date[0] + '-' + date[1] + '-' + date[2]
-			else:
-				return date[2] + '-' + date[1] + '-' + date[0]
-		elif len(date) == 2:
-			return '1000-' + date[1] + '-' + date[0]
+        if len(date) == 3:
+            if len(date[0]) == 4:
+                return date[0] + '-' + date[1] + '-' + date[2]
+            else:
+                return date[2] + '-' + date[1] + '-' + date[0]
+        elif len(date) == 2:
+            return '1000-' + date[1] + '-' + date[0]
 
 
 def data_process(cell):
-	if cell.ctype == 0 or cell.value == ' ':
-		pass
-	elif cell.ctype == 3 :
-		date = datetime(*xldate_as_tuple(cell.value, 0))
-		return date.strftime('%Y-%m-%d')
-	elif cell.ctype == 2 :
-		if cell.value*100 == int(cell.value*100):
-			return str(int(cell.value*100)) + '%'
-		return str(cell.value)
-	else:
-		return replace_n(cell.value)
+    if cell.ctype == 0 or cell.value == ' ':
+        pass
+    elif cell.ctype == 3:
+        date = datetime(*xldate_as_tuple(cell.value, 0))
+        return date.strftime('%Y-%m-%d')
+    elif cell.ctype == 2:
+        if cell.value * 100 == int(cell.value * 100):
+            return str(int(cell.value * 100)) + '%'
+        return str(cell.value)
+    else:
+        return replace_n(cell.value)
+
 
 def replace_n(something):
-	if "\n" in something :
-		something = something.replace('\n', ' ')
-	return something
+    if "\n" in something:
+        something = something.replace('\n', ' ')
+    return something
+
 
 def get_color(value):
-	if " " in value :
-		value = value.replace(' ', '')
-	return replace_n(value).strip()
+    if " " in value:
+        value = value.replace(' ', '')
+    return replace_n(value).strip()
+
 
 def get_price(cell):
-	if cell.ctype == 0 or cell.value == ' ':
-		return 0
-	elif cell.ctype == 2:
-		return cell.value
-	else:
-		return cell.value.replace('K', '')
+    if cell.ctype == 0 or cell.value == ' ':
+        return 0
+    elif cell.ctype == 2:
+        return cell.value
+    else:
+        return cell.value.replace('K', '')
