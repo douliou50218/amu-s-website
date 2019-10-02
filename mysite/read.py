@@ -54,7 +54,6 @@ def add_products(tables):
                 product_dict['add_date'] = get_date(table.cell(row, 5))
                 if table.cell(row, 5).ctype == 1:
                     date_texts = re.findall('[a-zA-Z]+', table.cell(row, 5).value)
-                    print(product_dict['product_id'])
                     for i in date_texts:
                         date_text += i + ' '
 
@@ -91,29 +90,20 @@ def sold_products(tables):
                 continue
 
             if product_flag:
+                date_text = ''
                 product_dict['sold_date'] = get_date(table.cell(row, 19))
                 if 'cause' in product_dict:
                     del product_dict['cause']
-                remark = ''
-
                 if table.cell(row, 19).ctype == 1:
-                    date_text = re.findall('[a-zA-Z]+', table.cell(row, 19).value)
-                    if date_text:
-                        if not remark:
-                            remark = ''
-                            for i in date_text:
-                                remark += i + ' '
-                        else:
-                            remark += ','
-                            for i in date_text:
-                                remark += i + ' '
+                    date_texts = re.findall('[a-zA-Z]+', table.cell(row, 19).value)
+                    for i in date_texts:
+                        date_text += i + ' '
+                    product_dict['cause'] = date_text
 
                 for col in range(20, 32):
                     if col != 21 and table.cell(row, col).ctype == 2:
                         product_dict['size'] = col + 3
                         product_dict['sell_count'] = int(table.cell(row, col).value)
-                        if remark:
-                            product_dict['cause'] = remark.strip()
                         sold_product.append(product_dict.copy())
 
     return sold_product

@@ -5,11 +5,11 @@ for i in sold_product[:5]:
     print(i)
 
 for i in all_product:
-	if i['product_id'] == '2016':
+	if i['product_id'] == '823':
 		print(i)
 
 for i in sold_product:
-	if i['product_id'] == '173':
+	if i['product_id'] == '9108':
 		print(i)
 
 #-----------------------------------------------------------------
@@ -24,29 +24,46 @@ for i in all_type:
 
 all_product = read.add_products(tables)
 
-#這裡重寫
 for i in all_product:
-	if i['type_of'] !='' :
-		All_Product.objects.create(product_id=i['product_id'],type_of=TypeOf.objects.get(type_of=i['type_of']),color=i['color'],add_date=i['add_date'],size=i['size'],price=i['price'],remarks=i['remarks'],quantity=i['quantity'])
-	else:
-		All_Product.objects.create(product_id=i['product_id'],color=i['color'],add_date=i['add_date'],size=i['size'],price=i['price'],remarks=i['remarks'],quantity=i['quantity'])
+	pd = All_Product()
+	pd.product_id = i['product_id']
+	pd.color=i['color']
+	if 'add_date' in i:
+		pd.add_date=i['add_date']
+	pd.size=i['size']
+	pd.price=i['price']
+	pd.remarks=i['remarks']
+	pd.quantity=i['quantity']
+	if i['type_of'] != '':
+		pd.type_of=TypeOf.objects.get(type_of=i['type_of'])
+	pd.save()
+	#All_Product.objects.create(product_id=i['product_id'],color=i['color'],add_date=i['add_date'],size=i['size'],price=i['price'],remarks=i['remarks'],quantity=i['quantity'])
 
 
 sold_product=read.sold_products(tables)
 
 for sold in sold_product:
 	try:
-		sold_pdt = All_Product.objects.get(product_id=sold['product_id'], color=sold['color'], size=sold['size'])
-		sold_pdt.quantity -= sold['sell_count']
-		sold_pdt.save()
-	except All_Product.DoesNotExist:
-		product = All_Product.objects.filter(product_id=sold['product_id'], color=sold['color'])
-		All_Product.objects.create(product_id=sold['product_id'],color=sold['color'],add_date='',size=sold['size'],price=product[0].price,remarks=product[0].remarks,quantity=0-sold['sell_count'])
-		sold_pdt = All_Product.objects.get(product_id=sold['product_id'], color=sold['color'], size=sold['size'])
+		#_gt 大於 __gte 大於等於 __lt 小於 __lte 小於等於
+		sold_pdts = All_Product.objects.filter(product_id=sold['product_id'], color=sold['color'], size=sold['size'], quantity__gt = 0)
+		if sold_pdts:
+			sold_pdt = sold_pdts[0]
+			sold_pdt.quantity -= sold['sell_count']
+			sold_pdt.save()
+		else:
+			product = All_Product.objects.filter(product_id=sold['product_id'], color=sold['color'])
+			All_Product.objects.create(product_id=sold['product_id'],color=sold['color'],add_date='',size=sold['size'],price=product[0].price,remarks=product[0].remarks,quantity=0-sold['sell_count'])
+			sold_pdt = All_Product.objects.get(product_id=sold['product_id'], color=sold['color'], size=sold['size'])
+	except Exception as e:
+		print(e,sold)
 	sale_rd = Sales_Record(product=sold_pdt)
 	sale_rd.sell_count = sold['sell_count']
 	sale_rd.sell_price = -1487
 	sale_rd.sale_date = sold['sold_date']
+	if 'cause' in sold:
+		sale_rd.remark = sold['cause']
+	else:
+		sale_rd.remark = ""
 	sale_rd.save()
 
 
