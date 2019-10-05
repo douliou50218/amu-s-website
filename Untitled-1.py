@@ -69,7 +69,8 @@ for sold in sold_product:
 	sale_rd = Sales_Record(product=sold_pdt)
 	sale_rd.sell_count = sold['sell_count']
 	sale_rd.sell_price = -1000
-	sale_rd.sale_date = sold['sold_date']
+	if 'sold_date' in sold:
+		sale_rd.sale_date = sold['sold_date']
 	if 'cause' in sold:
 		sale_rd.remark = sold['cause']
 	else:
