@@ -27,15 +27,15 @@ all_product = read.add_products(tables)
 for i in all_product:
 	pd = All_Product()
 	pd.product_id = i['product_id']
-	pd.color=i['color']
+	pd.color = i['color']
 	if 'add_date' in i:
-		pd.add_date=i['add_date']
-	pd.size=i['size']
-	pd.price=i['price']
-	pd.remarks=i['remarks']
-	pd.quantity=i['quantity']
+		pd.add_date = i['add_date']
+	pd.size = i['size']
+	pd.price = i['price']
+	pd.remarks = i['remarks']
+	pd.quantity = i['quantity']
 	if i['type_of'] != '':
-		pd.type_of=TypeOf.objects.get(type_of=i['type_of'])
+		pd.type_of = TypeOf.objects.get(type_of=i['type_of'])
 	pd.save()
 	#All_Product.objects.create(product_id=i['product_id'],color=i['color'],add_date=i['add_date'],size=i['size'],price=i['price'],remarks=i['remarks'],quantity=i['quantity'])
 
@@ -52,13 +52,23 @@ for sold in sold_product:
 			sold_pdt.save()
 		else:
 			product = All_Product.objects.filter(product_id=sold['product_id'], color=sold['color'])
-			All_Product.objects.create(product_id=sold['product_id'],color=sold['color'],add_date='',size=sold['size'],price=product[0].price,remarks=product[0].remarks,quantity=0-sold['sell_count'])
+			pd = All_Product()
+			pd.product_id = sold['product_id']
+			pd.color = sold['color']
+			pd.size = size=sold['size']
+			pd.price = product[0].price
+			pd.remarks = product[0].remarks
+			pd.quantity = 0-sold['sell_count']
+			pd.type_of=TypeOf.objects.get(type_of=product[0].type_of)
+			pd.save()
+
+			#All_Product.objects.create( product_id=sold['product_id'],color=sold['color'],size=sold['size'],price=product[0].price,remarks=product[0].remarks,quantity=0-sold['sell_count'])
 			sold_pdt = All_Product.objects.get(product_id=sold['product_id'], color=sold['color'], size=sold['size'])
 	except Exception as e:
 		print(e,sold)
 	sale_rd = Sales_Record(product=sold_pdt)
 	sale_rd.sell_count = sold['sell_count']
-	sale_rd.sell_price = -1487
+	sale_rd.sell_price = -1000
 	sale_rd.sale_date = sold['sold_date']
 	if 'cause' in sold:
 		sale_rd.remark = sold['cause']
