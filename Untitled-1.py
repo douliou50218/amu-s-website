@@ -43,33 +43,33 @@ for i in all_product:
 sold_product=read.sold_products(tables)
 
 for sold in sold_product:
-	try:
-		#_gt 大於 __gte 大於等於 __lt 小於 __lte 小於等於
-		sold_pdts = All_Product.objects.filter(product_id=sold['product_id'], color=sold['color'], size=sold['size'], quantity__gt = 0)
-		if sold_pdts:
-			sold_pdt = sold_pdts[0]
-			sold_pdt.quantity -= sold['sell_count']
-			sold_pdt.save()
-		else:
+	#_gt 大於 __gte 大於等於 __lt 小於 __lte 小於等於
+	sold_pdts = All_Product.objects.filter(product_id=sold['product_id'], color=sold['color'], size=sold['size'])
+	if sold_pdts:
+		sold_pdt = sold_pdts[0]
+		sold_pdt.quantity -= sold['sell_count']
+		sold_pdt.save()
+	else:
+		try:
 			product = All_Product.objects.filter(product_id=sold['product_id'], color=sold['color'])
 			pd = All_Product()
 			pd.product_id = sold['product_id']
+			if product[0].type_of:
+				pd.type_of = product[0].type_of
 			pd.color = sold['color']
-			pd.size = size=sold['size']
+			pd.size = sold['size']
 			pd.price = product[0].price
 			pd.remarks = product[0].remarks
 			pd.quantity = 0-sold['sell_count']
-			pd.type_of=TypeOf.objects.get(type_of=product[0].type_of)
 			pd.save()
-
 			#All_Product.objects.create( product_id=sold['product_id'],color=sold['color'],size=sold['size'],price=product[0].price,remarks=product[0].remarks,quantity=0-sold['sell_count'])
 			sold_pdt = All_Product.objects.get(product_id=sold['product_id'], color=sold['color'], size=sold['size'])
-	except Exception as e:
-		print(e,sold)
+		except Exception as e:
+			print(e,sold)
 	sale_rd = Sales_Record(product=sold_pdt)
 	sale_rd.sell_count = sold['sell_count']
 	sale_rd.sell_price = -1000
-	if 'sold_date' in sold:
+	if sold['sold_date']:
 		sale_rd.sale_date = sold['sold_date']
 	if 'cause' in sold:
 		sale_rd.remark = sold['cause']
@@ -78,6 +78,7 @@ for sold in sold_product:
 	sale_rd.save()
 
 
+#清除資料
 Sales_Record.objects.all().delete()
 All_Product.objects.all().delete()
 
@@ -86,11 +87,13 @@ aaa=All_Product.objects.all()
 num=0
 for i in aaa:
     num+=i.quantity
+
+num
+
 aaa=Sales_Record.objects.all()
 num=0
 for i in aaa:
     num+=i.sell_count
-
 
 num
 #-----------------------------------------------------------------#
