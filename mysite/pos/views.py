@@ -5,26 +5,26 @@ from django.db import connection
 from .models import All_Product, Clerk, Customer, Sales_Record, TodayRecord, TypeOf
 from django.http import HttpResponse
 
+
 def index(request):
     all_products = All_Product.objects.exclude(quantity=0)
     all_count = 0
     outside = []
-    for product in all_products :
+    for product in all_products:
         aaa = {'product_id': product.product_id, 'color': product.color}
         for i in outside:
-            if aaa['product_id'] == i['product_id'] and aaa['color'] == i['color'] :
+            if aaa['product_id'] == i['product_id'] and aaa['color'] == i['color']:
                 break
-        else :
+        else:
             outside.append(aaa)
 
         all_count += product.quantity
 
-
     clerk = Clerk.objects.all()
     clerk_sales = []
     sale_dict = {}
-    for i in clerk :
-        #這裡要分月份
+    for i in clerk:
+        # 這裡要分月份
         sales = Sales_Record.objects.filter(clerk=i)
         sale_dict['clerk'] = i.clerk_name
         sale_dict['sales_num'] = len(sales)
@@ -32,7 +32,7 @@ def index(request):
 
     context = {
         'outside': outside,
-        'inside': all_count-len(outside),
+        'inside': all_count - len(outside),
         'all_count': all_count,
         'clerk_sales': clerk_sales,
     }
@@ -41,7 +41,8 @@ def index(request):
 
 def storage(request):
     with connection.cursor() as c:
-        c.execute('SELECT product_id, type_of_id, color, size, quantity, add_date, price, remarks FROM pos_all_product WHERE NOT quantity = 0')
+        c.execute(
+            'SELECT product_id, type_of_id, color, size, quantity, add_date, price, remarks FROM pos_all_product WHERE NOT quantity = 0')
         stock_products = c.fetchall()
 
     context = {
@@ -107,12 +108,13 @@ def sold_today(request):
     elif 'number' in request.POST:
         print(request.POST.get('number'))
         record = TodayRecord.objects.all()
-        d = record[int(request.POST.get('number'))-1]
+        d = record[int(request.POST.get('number')) - 1]
         d.delete()
 
     elif request.POST.get('submit'):
         p = TodayRecord()
-        p.product = All_Product.objects.get(product_id=request.POST.get('product'), color=request.POST.get('color'), size=request.POST.get('size'))
+        p.product = All_Product.objects.get(product_id=request.POST.get('product'), color=request.POST.get('color'),
+                                            size=request.POST.get('size'))
         p.sell_count = request.POST.get('count')
         p.sell_price = request.POST.get('price')
         p.clerk = Clerk.objects.get(clerk_name=request.POST.get('clerk'))
@@ -122,9 +124,14 @@ def sold_today(request):
     customer = Customer.objects.all()
     stock_products = All_Product.objects.exclude(quantity=0)
     product_ids = set()
-    for i in stock_products :
+    for i in stock_products:
         product_ids.add(i.product_id)
     clerk = Clerk.objects.all()
+
+    with connection.cursor() as c:
+        c.execute('SELECT product FROM pos_Sales_Record')
+        sold_products = c.fetchall()
+    # 結算
     record = TodayRecord.objects.all()
     rcd_money = 0
     rcd_length = 0
@@ -134,9 +141,10 @@ def sold_today(request):
 
     context = {
         'product_ids': product_ids,
+        'sold_products': sold_products,
         'customer': customer,
         'clerk': clerk,
-        'record': zip(range(1,len(record)+1),record),
+        'record': zip(range(1, len(record) + 1), record),
         'rcd_money': rcd_money,
         'rcd_length': rcd_length,
     }
