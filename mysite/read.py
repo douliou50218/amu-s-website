@@ -5,7 +5,9 @@ import re
 
 
 def get_file():
-    data = xlrd.open_workbook(r'E:\BANG TON KHO th6-2019.xlsx')
+
+    data = xlrd.open_workbook(r'E:\amu-s-website\BANG TON KHO th6-2019.xlsx')
+
     tables = []
     for i in range(0, 10):
         tables.append(data.sheet_by_name(f"{i}"))
