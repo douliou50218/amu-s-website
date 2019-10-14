@@ -114,13 +114,13 @@ Sold
 
 				<script>
 					$(function () {
-						var Product = [
+						var reProduct = [
 						{% for n in product_ids %}
 							"{{ n }}",
 						{% endfor %}
 						];
 						$("#returnproduct").typeahead({
-							source: Product
+							source: reProduct
 						});
 					});
 				</script>

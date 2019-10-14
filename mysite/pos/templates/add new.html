@@ -43,7 +43,7 @@
 								<option>{{ n.type_of }}</option>
 								{% endfor %}
 							</select>
-							<a class="col-sm-1 related-widget-wrapper-link add-related" id="add_id_type_of" href="/admin/pos/typeof/add/?_to_field=type_of&amp;_popup=1" title="新增其它 type of"><img src="/static/admin/img/icon-addlink.svg" alt="新增"></a>
+							<a class="col-sm-1 related-widget-wrapper-link add-related" id="add_id_type_of" href="{% url "add_type" %}" title="新增其它 type of"><img src="/static/admin/img/icon-addlink.svg" alt="新增"></a>
 							</div>
 						</div>
 
@@ -83,7 +83,7 @@
 					</div>
 
 					<div id="size" class="row">
-						
+
 						<script>
 							let name = [" _ XS", " _ S", " _ M", " _ L", " _ XL", " _ XXL", " _ 3XL", " _ 4XL", " _ 5XL", " _ 6XL"]
 							for(i = 24; i < 35; i++){
@@ -135,9 +135,19 @@
 				</a>
 				<!-- Card Content - Collapse -->
 				<div class="collapse" id="clerk" style="">
-				<div class="card-body">
-					This is a collapsable card example using Bootstrap's built in collapse functionality. <strong>Click on the card header</strong> to see the card body collapse and expand!
-				</div>
+					<div class="card-body">
+
+						<div class="row">
+							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">店員名字：</label>
+							<div class="col-sm-2">
+								<input type="tel" name="phone" class="inputphone form-control">
+							</div>
+							<div class="col-sm-auto">
+								<input type="submit" name="submit" class="btn btn-primary" value="Submit">
+							</div>
+						</div>
+
+					</div>
 				</div>
 			</div>
 		</div>

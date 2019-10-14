@@ -128,9 +128,9 @@ def sold_today(request):
         product_ids.add(i.product_id)
     clerk = Clerk.objects.all()
 
-    with connection.cursor() as c:
-        c.execute('SELECT product FROM pos_Sales_Record')
-        sold_products = c.fetchall()
+    #with connection.cursor() as c:
+        #c.execute('SELECT product FROM pos_Sales_Record')
+        #sold_products = c.fetchall()
     # 結算
     record = TodayRecord.objects.all()
     rcd_money = 0
@@ -141,7 +141,7 @@ def sold_today(request):
 
     context = {
         'product_ids': product_ids,
-        'sold_products': sold_products,
+        #'sold_products': sold_products,
         'customer': customer,
         'clerk': clerk,
         'record': zip(range(1, len(record) + 1), record),
@@ -160,3 +160,7 @@ def add_new(request):
     }
 
     return render(request, 'add new.html', context)
+
+
+def add_type(request):
+    return render(request, 'add_type.html')
