@@ -1,8 +1,0 @@
-.vscode
-a-mu
-*.pyc
-test.py
-.idea
-main.py
-mysite/__init__.py
-mysite/db.sqlite3
