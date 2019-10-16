@@ -123,14 +123,21 @@ def sold_today(request):
 
     customer = Customer.objects.all()
     stock_products = All_Product.objects.exclude(quantity=0)
-    product_ids = set()
+    all_pdtid = []
     for i in stock_products:
-        product_ids.add(i.product_id)
+        if i.product_id not in all_pdtid:
+            all_pdtid.append(i.product_id)
     clerk = Clerk.objects.all()
 
-    #with connection.cursor() as c:
-        #c.execute('SELECT product FROM pos_Sales_Record')
-        #sold_products = c.fetchall()
+    sold_products = Sales_Record.objects.all()
+    sold_pdtid = []
+    for i in sold_products:
+        product = All_Product.objects.get(id=i.product_id)
+        if product.product_id not in sold_pdtid:
+            sold_pdtid.append(product.product_id)
+    # with connection.cursor() as c:
+    #     c.execute('SELECT product FROM pos_Sales_Record')
+    #     sold_products = c.fetchall()
     # 結算
     record = TodayRecord.objects.all()
     rcd_money = 0
@@ -140,8 +147,8 @@ def sold_today(request):
         rcd_length += i.sell_count
 
     context = {
-        'product_ids': product_ids,
-        #'sold_products': sold_products,
+        'all_pdtid': all_pdtid,
+        'sold_pdtid': sold_pdtid,
         'customer': customer,
         'clerk': clerk,
         'record': zip(range(1, len(record) + 1), record),
