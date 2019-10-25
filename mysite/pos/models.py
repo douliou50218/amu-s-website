@@ -95,6 +95,7 @@ class TodayRecord(models.Model):
         models.PROTECT,
     )
     sell_count = models.IntegerField()
+    base_price = models.IntegerField()
     sell_price = models.IntegerField()
     customer = models.CharField(
         max_length=100,

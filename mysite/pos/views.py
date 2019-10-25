@@ -129,15 +129,16 @@ def sold_today(request):
             all_pdtid.append(i.product_id)
     clerk = Clerk.objects.all()
 
-    sold_products = Sales_Record.objects.all()
+    # 退貨時商品搜尋
+    with connection.cursor() as c:
+        c.execute('''SELECT pap.product_id, pap.color, pap.size, psr.sale_date, psr.sell_price, psr.sell_count, psr.customer_id
+                FROM pos_Sales_Record as psr
+                JOIN pos_All_Product as pap on psr.product_id = pap.id''')
+        sold_products = c.fetchall()
     sold_pdtid = []
     for i in sold_products:
-        product = All_Product.objects.get(id=i.product_id)
-        if product.product_id not in sold_pdtid:
-            sold_pdtid.append(product.product_id)
-    # with connection.cursor() as c:
-    #     c.execute('SELECT product FROM pos_Sales_Record')
-    #     sold_products = c.fetchall()
+        if i[0] not in sold_pdtid:
+            sold_pdtid.append(i[0])
     # 結算
     record = TodayRecord.objects.all()
     rcd_money = 0
@@ -148,9 +149,9 @@ def sold_today(request):
 
     context = {
         'all_pdtid': all_pdtid,
-        'sold_pdtid': sold_pdtid,
         'customer': customer,
         'clerk': clerk,
+        'sold_pdtid': sold_pdtid,
         'record': zip(range(1, len(record) + 1), record),
         'rcd_money': rcd_money,
         'rcd_length': rcd_length,

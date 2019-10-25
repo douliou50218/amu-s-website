@@ -3,7 +3,7 @@
 
 
 {% block title %}
-Sold
+Sold today
 {% endblock %}
 
 {% block content %}
@@ -21,8 +21,8 @@ Sold
 				<div class="card-header py-3">
 					<h6 class="m-0 font-weight-bold text-primary">Hình thức bán hàng</h6>
 				</div>
-				<!-- 表單內容 -->
 
+                <!-- 售貨的商品ID與客人自動填入 -->
 				<script>
 					$(function () {
 						var Product = [
@@ -38,14 +38,15 @@ Sold
 						$("#inputproduct").typeahead({
 							source: Product
 						});
-						$(".inputphone").typeahead({
+						$("#inputphone").typeahead({
 							source: Customer
 						});
 					});
 				</script>
 
 				<div class="card-body">
-					<form class="validate-form" method="POST">
+				    <!-- 表單內容 -->
+					<form id="sale" class="validate-form" method="POST">
 						{% csrf_token %}
 						<div class="form-group row ">
 							<label class="col-sm-1 col-form-label text-gray-900 text-lg">商品</label>
@@ -85,7 +86,7 @@ Sold
 							</div>
 							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">客人電話</label>
 							<div class="col">
-								<input type="tel" name="phone" class="inputphone form-control">
+								<input type="tel" name="phone" id="inputphone form-control">
 							</div>
 							<div class="col-sm-auto offset-sm-2">
 								<button type="reset" class="btn btn-secondary">Clear</button>
@@ -111,6 +112,7 @@ Sold
 				<h6 class="m-0 font-weight-bold text-gray-600">退換貨</h6>
 				</a>
 
+                <!-- 換貨的商品ID自動填入 -->
 				<script>
 					$(function () {
 						var reProduct = [
@@ -136,21 +138,16 @@ Sold
 								<input type="text" name="product" id="returnproduct" class="form-control"
 									placeholder="MA HANG">
 							</div>
-							<div id="div_color" class="col-sm-2">
-							<!-- max = '18690'=>'BI TRANG DEN' -->
-								<select name="color" id="returncolor" class="form-control text-gray-500" disabled>
-									<option>MAU</option>
-								</select>
-							</div>
-							<div class="col-sm-2">
-								<select name="size" id="returnsize" class="form-control text-gray-500" disabled>
-									<option>size</option>
-								</select>
+							<div class="col-sm-auto">
+								<input type="submit" name="submit" class="btn btn-primary" value="搜尋">
 							</div>
 
 							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">客人電話</label>
 							<div class="col">
 								<input type="tel" name="phone" class="inputphone form-control">
+							</div>
+							<div class="col-sm-auto">
+								<input type="submit" name="submit" class="btn btn-primary" value="搜尋">
 							</div>
 						</div>
 
@@ -159,7 +156,6 @@ Sold
 								<input type="submit" name="submit" class="btn btn-primary" value="搜尋">
 							</div>
 						</div>
-
 
 					</form>
 				</div>
@@ -277,14 +273,15 @@ Sold
 
 	</div>
 
+        {% for n in sold_pdtid %}
+            {{ n }}<br>
+        {% endfor %}
 </div>
 
 <script>$.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});</script>
 <script>
 /*=====================[ Validate ]=====================*/
-	let $inputs = $('form .form-control');
-
-	$('.validate-form').on('submit', function (e) {
+	$('#sale > form-group').on('submit', function (e) {
 
 		$inputs.each(function () {
 			let $input = $(this);
