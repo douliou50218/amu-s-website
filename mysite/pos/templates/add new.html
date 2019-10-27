@@ -58,7 +58,8 @@
 						</div>
 						<div class="col">
 							<label for="type" class="text-gray-900">日期</label>
-							<input type="number" name="price" id="inputprice" class="form-control" placeholder="GIA">
+							<input type="number" name="date" id="inputprice" class="form-control" placeholder="date">
+
 						</div>
 					</div>
 
@@ -140,10 +141,10 @@
 						<div class="row">
 							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">店員名字：</label>
 							<div class="col-sm-2">
-								<input type="tel" name="phone" class="inputphone form-control">
+								<input type="tel" name="name" class="inputphone form-control">
 							</div>
 							<div class="col-sm-auto">
-								<input type="submit" name="submit" class="btn btn-primary" value="Submit">
+								<input type="submit" name="clerksubmit" class="btn btn-primary" value="送出">
 							</div>
 						</div>
 
@@ -162,11 +163,9 @@
 				let $input = $(this);
 				console.log($input);
 				if ($input .val() == "") {
-					if ($input.attr('name') != 'phone' && $input.attr('name') != 'clerk') {
-						alert($input.attr('placeholder') + '不能不填!');
-						e.preventDefault();
-						return false;
-					}
+                    alert($input.attr('name') + '不能不填!');
+                    e.preventDefault();
+                    return false;
 				}
 			});
 

@@ -41,8 +41,7 @@ def index(request):
 
 def storage(request):
     with connection.cursor() as c:
-        c.execute(
-            'SELECT product_id, type_of_id, color, size, quantity, add_date, price, remarks FROM pos_all_product WHERE NOT quantity = 0')
+        c.execute('SELECT product_id, type_of_id, color, size, quantity, add_date, price, remarks FROM pos_all_product WHERE NOT quantity = 0')
         stock_products = c.fetchall()
 
     context = {
@@ -116,6 +115,7 @@ def sold_today(request):
         p.product = All_Product.objects.get(product_id=request.POST.get('product'), color=request.POST.get('color'),
                                             size=request.POST.get('size'))
         p.sell_count = request.POST.get('count')
+        p.base_price = p.product.price
         p.sell_price = request.POST.get('price')
         p.clerk = Clerk.objects.get(clerk_name=request.POST.get('clerk'))
         p.customer = request.POST.get('phone')

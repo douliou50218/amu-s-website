@@ -86,7 +86,7 @@ Sold today
 							</div>
 							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">客人電話</label>
 							<div class="col">
-								<input type="tel" name="phone" id="inputphone form-control">
+								<input type="tel" name="phone" id="inputphone" class="form-control">
 							</div>
 							<div class="col-sm-auto offset-sm-2">
 								<button type="reset" class="btn btn-secondary">Clear</button>
@@ -144,14 +144,8 @@ Sold today
 
 							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">客人電話</label>
 							<div class="col">
-								<input type="tel" name="phone" class="inputphone form-control">
+								<input type="tel" name="phone" id="returnphone" class="form-control">
 							</div>
-							<div class="col-sm-auto">
-								<input type="submit" name="submit" class="btn btn-primary" value="搜尋">
-							</div>
-						</div>
-
-						<div class="row justify-content-end">
 							<div class="col-sm-auto">
 								<input type="submit" name="submit" class="btn btn-primary" value="搜尋">
 							</div>
@@ -209,6 +203,7 @@ Sold today
 								<td>{{ i.product.size }}</td>
 								<td>{{ i.product.color | default_if_none:"" }}</td>
 								<td>{{ i.sell_count }}</td>
+								<td>{{ i.base_price }}</td>
 								<td>{{ i.sell_price | default_if_none:"" }}</td>
 								<td>{{ i.customer | default_if_none:"" }}</td>
 								<td>{{ i.clerk }}</td>
@@ -273,9 +268,6 @@ Sold today
 
 	</div>
 
-        {% for n in sold_pdtid %}
-            {{ n }}<br>
-        {% endfor %}
 </div>
 
 <script>$.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});</script>
