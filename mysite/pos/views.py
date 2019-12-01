@@ -1,9 +1,31 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, render_to_response
+from django.http import JsonResponse, HttpResponseRedirect
 from django.db import connection
-
+from django.contrib.auth.decorators import login_required
 from .models import All_Product, Clerk, Customer, Sales_Record, TodayRecord, TypeOf
 from django.http import HttpResponse
+from django.contrib import auth  # 別忘了import auth
+
+
+def login(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/index/')
+
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+
+    user = auth.authenticate(username=username, password=password)
+
+    if user is not None and user.is_active:
+        auth.login(request, user)
+        return HttpResponseRedirect('/index/')
+    else:
+        return render_to_response('login.html')
+
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect('/index/')
 
 
 def index(request):
@@ -41,7 +63,9 @@ def index(request):
 
 def storage(request):
     with connection.cursor() as c:
-        c.execute('SELECT product_id, type_of_id, color, size, quantity, add_date, price, remarks FROM pos_all_product WHERE NOT quantity = 0')
+        c.execute('''SELECT product_id, type_of_id, color, size, quantity, add_date, price, remarks 
+            FROM pos_all_product 
+            WHERE NOT quantity = 0''')
         stock_products = c.fetchall()
 
     context = {
@@ -160,6 +184,7 @@ def sold_today(request):
     return render(request, 'sold today.html', context)
 
 
+@login_required
 def add_new(request):
     type_of = TypeOf.objects.all()
 
@@ -170,5 +195,6 @@ def add_new(request):
     return render(request, 'add new.html', context)
 
 
+@login_required
 def add_type(request):
     return render(request, 'add_type.html')

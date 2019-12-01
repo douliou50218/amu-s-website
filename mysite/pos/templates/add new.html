@@ -1,4 +1,4 @@
-{% extends "menu.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
 
 
@@ -65,9 +65,6 @@
                                                     <option>{{ n.type_of }}</option>
                                                 {% endfor %}
                                             </select>
-                                            {#                                            <a class="col-sm-1 related-widget-wrapper-link add-related"#}
-                                            {#                                               id="add_id_type_of" href="{% url "add_type" %}" title="新增其它 type of"><img#}
-                                            {#                                                    src="admin/img/icon-addlink.svg" alt="新增"></a>#}
                                             <a class="related-widget-wrapper-link add-related" id="add_id_type_of"
                                                href="{% url "add_type" %}"
                                                title="新增其它 type of"><img src="{% static "admin/img/icon-addlink.svg" %}"

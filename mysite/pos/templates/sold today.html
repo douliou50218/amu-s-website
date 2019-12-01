@@ -1,4 +1,4 @@
-{% extends "menu.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
 
 
@@ -25,20 +25,20 @@ Sold today
                 <!-- 售貨的商品ID與客人自動填入 -->
 				<script>
 					$(function () {
-						var Product = [
+						let Product = [
 						{% for n in all_pdtid %}
 							"{{ n }}",
 						{% endfor %}
 						];
-						var Customer = [
+						let Customer = [
 						{% for n in customer %}
 							"{{ n.phone_number }}",
 						{% endfor %}
 						];
-						$("#inputproduct").typeahead({
+						$("#input_product").typeahead({
 							source: Product
 						});
-						$("#inputphone").typeahead({
+						$("#input_phone").typeahead({
 							source: Customer
 						});
 					});
@@ -52,27 +52,27 @@ Sold today
 							<label class="col-sm-1 col-form-label text-gray-900 text-lg">商品</label>
 							<!-- max='618107190088-1' -->
 							<div id="div_pdt" class="col-sm-auto">
-								<input type="text" name="product" id="inputproduct" class="form-control"
+								<input type="text" name="product" id="input_product" class="form-control"
 									placeholder="MA HANG">
 							</div>
 							<div id="div_color" class="col-sm-2">
 							<!-- max = '18690'=>'BI TRANG DEN' -->
-								<select name="color" id="inputcolor" class="form-control text-gray-500" disabled>
+								<select name="color" id="input_color" class="form-control text-gray-500" disabled>
 									<option>MAU</option>
 								</select>
 							</div>
 							<div class="col-sm-2">
-								<select name="size" id="inputsize" class="form-control text-gray-500" disabled>
+								<select name="size" id="input_size" class="form-control text-gray-500" disabled>
 									<option>size</option>
 								</select>
 							</div>
 							<div class="col-sm-2">
-								<select name="count" id="inputcount" class="form-control text-gray-500" disabled>
+								<select name="count" id="input_count" class="form-control text-gray-500" disabled>
 									<option>count</option>
 								</select>
 							</div>
 							<div class="col-sm-2">
-								<input type="number" name="price" id="inputprice" class="form-control" placeholder="GIA">
+								<input type="number" name="price" id="input_price" class="form-control" placeholder="GIA">
 							</div>
 						</div>
 						<div class="row">
@@ -86,7 +86,7 @@ Sold today
 							</div>
 							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">客人電話</label>
 							<div class="col">
-								<input type="tel" name="phone" id="inputphone" class="form-control">
+								<input type="tel" name="phone" id="input_phone" class="form-control">
 							</div>
 							<div class="col-sm-auto offset-sm-2">
 								<button type="reset" class="btn btn-secondary">Clear</button>
@@ -115,12 +115,12 @@ Sold today
                 <!-- 換貨的商品ID自動填入 -->
 				<script>
 					$(function () {
-						var reProduct = [
+                        let reProduct = [
 						{% for n in sold_pdtid %}
 							"{{ n }}",
 						{% endfor %}
 						];
-						$("#returnproduct").typeahead({
+						$("#return_product").typeahead({
 							source: reProduct
 						});
 					});
@@ -135,7 +135,7 @@ Sold today
 							<label class="col-sm-1 col-form-label text-gray-900 text-lg">商品</label>
 							<!-- max='618107190088-1' -->
 							<div id="div_pdt" class="col">
-								<input type="text" name="product" id="returnproduct" class="form-control"
+								<input type="text" name="product" id="return_product" class="form-control"
 									placeholder="MA HANG">
 							</div>
 							<div class="col-sm-auto">
@@ -207,7 +207,7 @@ Sold today
 								<td>{{ i.sell_price | default_if_none:"" }}</td>
 								<td>{{ i.customer | default_if_none:"" }}</td>
 								<td>{{ i.clerk }}</td>
-								<td><a href="" name={{ n }} class="delete btn btn-danger btn-circle"><i class="fas fa-trash"></i></a></td>
+								<td><a href="" name="{{ n }}" class="delete btn btn-danger btn-circle "><i class="fas fa-trash"></i></a></td>
 							</tr>
 							{% endfor %}
 
@@ -292,14 +292,14 @@ Sold today
 
 	$('.validate-form').on('reset', function () {
 		$('select:not(#input_clerk)  option').remove();
-		$("<option></option>").text('MAU').appendTo('#inputcolor');
-		$("<option></option>").text('size').appendTo('#inputsize');
-		$("<option></option>").text('count').appendTo('#inputcount');
+		$("<option></option>").text('MAU').appendTo('#input_color');
+		$("<option></option>").text('size').appendTo('#input_size');
+		$("<option></option>").text('count').appendTo('#input_count');
 		$('select:not(#input_clerk)').attr("disabled","true");
     });
 
 	$('.delete').click(function (e) {
-		var check = confirm("確定刪除嗎?");
+		let check = confirm("確定刪除嗎?");
 		if (check) {
 			let $input = $(this);
 			$.ajax({
@@ -320,11 +320,11 @@ Sold today
 		return true;
 	})
 
-	$('#inputproduct').on("input blur focus",function(){
+	$('#input_product').on("input blur focus",function(){
 		$.ajax({
 			type: "POST",
 			data: {
-				product: $("#inputproduct").val(),
+				product: $("#input_product").val(),
 				type: "product"
 			},
 			url: "{% url 'sold_today' %}",
@@ -338,8 +338,8 @@ Sold today
 					$("#div_color").attr("class", 'col-sm-2');
 				}
 				if (result.repeat.length != 0) {
-					$("#inputcolor option").remove();
-					let color = $("#inputcolor");
+					$("#input_color option").remove();
+					let color = $("#input_color");
 					for(i = 0; i < result.repeat.length; i++){
 						$("<option></option>").text(result.repeat[i]).appendTo(color);
 						if (result.repeat[i].length > 9 && $("#div_pdt").attr("class") == 'col-sm-auto') {
@@ -347,7 +347,7 @@ Sold today
 							$("#div_color").attr("class", 'col-sm-3');
 						}
 					}
-					$('#inputcolor').removeAttr("disabled").removeClass('text-gray-500');
+					$('#input_color').removeAttr("disabled").removeClass('text-gray-500');
 					colordate();
 					sizedate();
 				}
@@ -355,11 +355,11 @@ Sold today
 		});
 	})
 
-	$('#inputcolor').change(function () {
+	$('#input_color').change(function () {
 		colordate();
 		sizedate();
 	})
-	$('#inputsize').change(function () {
+	$('#input_size').change(function () {
 		sizedate();
 	})
 
@@ -367,8 +367,8 @@ Sold today
 		$.ajax({
 			type: "POST",
 			data: {
-				product: $("#inputproduct").val(),
-				color: $("#inputcolor :selected").text(),
+				product: $("#input_product").val(),
+				color: $("#input_color :selected").text(),
 				type: "color"
 			},
 			url: "{% url 'sold_today' %}",
@@ -376,14 +376,14 @@ Sold today
 			dataType: "json",
 			async: false,
 			success: function (result) {
-				$('#inputsize').attr("disabled","true");
+				$('#input_size').attr("disabled","true");
 				if (result.repeat.length != 0) {
-					$("#inputsize option").remove();
-					let size = $("#inputsize");
+					$("#input_size option").remove();
+					let size = $("#input_size");
 					for(i = 0; i < result.repeat.length; i++){
 						$("<option></option>").text(result.repeat[i]).appendTo(size);
 					}
-					$('#inputsize').removeAttr("disabled").removeClass('text-gray-500');
+					$('#input_size').removeAttr("disabled").removeClass('text-gray-500');
 					sizedate()
 				} else {
 					alert('沒找到商品2');
@@ -397,9 +397,9 @@ Sold today
 		$.ajax({
 			type: "POST",
 			data: {
-				product: $("#inputproduct").val(),
-				color: $("#inputcolor :selected").text(),
-				size:  $("#inputsize :selected").text(),
+				product: $("#input_product").val(),
+				color: $("#input_color :selected").text(),
+				size:  $("#input_size :selected").text(),
 				type: "count"
 			},
 			url: "{% url 'sold_today' %}",
@@ -407,15 +407,15 @@ Sold today
 			dataType: "json",
 			async: false,
 			success: function (result) {
-				$('#inputcount').attr("disabled","true");
+				$('#input_count').attr("disabled","true");
 				if (result.repeat.length != 0) {
-					$("#inputcount option").remove();
-					let count = $("#inputcount");
+					$("#input_count option").remove();
+					let count = $("#input_count");
 					console.log(result.repeat)
 					for(i = 0; i < result.repeat; i++){
 						$("<option></option>").text(i+1).appendTo(count);
 					}
-					$('#inputcount').removeAttr("disabled").removeClass('text-gray-500');
+					$('#input_count').removeAttr("disabled").removeClass('text-gray-500');
 				} else {
 					alert('沒找到商品3');
 				}

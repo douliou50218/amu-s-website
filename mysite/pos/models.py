@@ -16,6 +16,7 @@ SIZE_CHOICES = (
     (34, '6XL'),
 )
 
+
 class TypeOf(models.Model):
     type_of = models.CharField(primary_key=True,max_length=50)
 
@@ -26,11 +27,13 @@ class Clerk(models.Model):
     def __str__(self):
         return self.clerk_name
 
+
 class Customer(models.Model):
     phone_number = models.CharField(primary_key=True,max_length=100)
 
     def __str__(self):
         return self.phone_number
+
 
 class All_Product(models.Model):
     product_id = models.CharField(max_length=50)
@@ -59,6 +62,7 @@ class All_Product(models.Model):
 
     def __str__(self):
         return self.product_id
+
 
 class Sales_Record(models.Model):
     #多个foreignkey指向同一个主表，related_name必须设置。
