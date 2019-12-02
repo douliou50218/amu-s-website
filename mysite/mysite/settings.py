@@ -14,6 +14,9 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOGIN_URL = '/login'  # 預設 login page 的 url
+LOGIN_REDIRECT_URL = '/add_new'  # login 完之後導向的頁面
+LOGOUT_REDIRECT_URL = '/'  # logout 完之後導向的頁面
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/

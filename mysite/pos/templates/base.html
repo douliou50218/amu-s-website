@@ -52,8 +52,23 @@
             <div class="sidebar-brand-text mx-3">bububu</div>
         </a>
 
+        {% if user.is_authenticated %}
+        <!-- next={request.path}可以讓使用者在登出之後，回到當初同一個畫面 -->
+        <li class="nav-item pb-2">
+            <span class="pl-3 text-warning">User: {{ user.get_username }}</span>
+            <a class="pl-3 text-danger" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+        </li>
+        {% else %}
+        <!-- next={request.path}可以讓使用者在登入成功之後，回到當初同一個畫面 -->
+        <li class="nav-item">
+            <a class="pl-3 text-warning" href="{% url 'login'%}?next={{request.path}}">Login</a>
+        </li>
+        {% endif %}
+
+
         <!-- 分隔線 -->
         <hr class="sidebar-divider my-0">
+
 
         <!-- index -->
         <li class="nav-item">
@@ -90,20 +105,6 @@
                 <i class="fas fa-fw fa-pen"></i>
                 <span>sold today</span></a>
         </li>
-
-        {% if user.is_authenticated %}
-        <li>User: {{ user.get_username }}</li>
-        <!-- next={request.path}可以讓使用者在登出之後，回到當初同一個畫面 -->
-        <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
-        {% else %}
-        <!-- next={request.path}可以讓使用者在登入成功之後，回到當初同一個畫面 -->
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}?next={{request.path}}">
-                <i class="fas fa-fw fa-lock"></i>
-                <span>Login</span>
-            </a>
-        </li>
-        {% endif %}
 
         <!-- 添加資料頁 -->
         <li class="nav-item">

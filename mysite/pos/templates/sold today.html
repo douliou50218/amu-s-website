@@ -48,7 +48,7 @@ Sold today
 				    <!-- 表單內容 -->
 					<form id="sale" class="validate-form" method="POST">
 						{% csrf_token %}
-						<div class="form-group row ">
+						<div class="form-group row">
 							<label class="col-sm-1 col-form-label text-gray-900 text-lg">商品</label>
 							<!-- max='618107190088-1' -->
 							<div id="div_pdt" class="col-sm-auto">
@@ -277,7 +277,6 @@ Sold today
 
 		$inputs.each(function () {
 			let $input = $(this);
-			console.log($input);
 			if ($input .val() == "") {
 				if ($input.attr('name') != 'phone' && $input.attr('name') != 'clerk') {
 					alert($input.attr('placeholder') + '不能不填!');

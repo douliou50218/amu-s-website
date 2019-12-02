@@ -7,14 +7,21 @@ Login
 {% endblock %}
 
 {% block content %}
-    <h1>Login</h1>
-    <form action="" method="post">
+
+<div class="container-fluid">
+
+	<!-- Page Heading -->
+	<div class="mt-4 mb-2 mr-2 ml-2">
+		<h1 class="h1 mb-0">登入</h1>
+        <br>
+	</div>
+    <form action="" method="post" class="validate-form">
         {% csrf_token %}
-        <label for="username">用戶名稱:</label>
+        <label for="username" class="text-lg">用戶名稱:</label>
         <input type="text" name="username" value="" id="username"> <br/>
-        <label for="password">用戶密碼:</label>
-        <input type="password" name="password" value="" id="password"> <br/>
+        <label for="password" class="text-lg">用戶密碼:</label>
+        <input type="password" name="password" value="" id="password"> <br/><br/>
         <input type="submit" value="登入"/>
     </form>
-</form>
+</div>
 {% endblock %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.http import JsonResponse, HttpResponseRedirect
 from django.db import connection
 from django.contrib.auth.decorators import login_required
@@ -9,7 +9,7 @@ from django.contrib import auth  # 別忘了import auth
 
 def login(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/index/')
+        return HttpResponseRedirect('/')
 
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
@@ -18,7 +18,7 @@ def login(request):
 
     if user is not None and user.is_active:
         auth.login(request, user)
-        return HttpResponseRedirect('/index/')
+        return HttpResponseRedirect('/')
     else:
         return render_to_response('login.html')
 
@@ -184,17 +184,19 @@ def sold_today(request):
     return render(request, 'sold today.html', context)
 
 
-@login_required
 def add_new(request):
-    type_of = TypeOf.objects.all()
+    if not request.user.is_authenticated:
+        return redirect('login')
+    else:
+        type_of = TypeOf.objects.all()
 
-    context = {
-        'type_of': type_of,
-    }
-
-    return render(request, 'add new.html', context)
+        context = {
+            'type_of': type_of,
+        }
+        return render(request, 'add new.html', context)
 
 
 @login_required
 def add_type(request):
+
     return render(request, 'add_type.html')
