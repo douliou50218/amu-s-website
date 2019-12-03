@@ -37,6 +37,7 @@
         </div>
 
 
+        <!-- 添加商品 Card -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card shadow mb-4 mt-4">
@@ -45,42 +46,36 @@
                        aria-expanded="true" aria-controls="collapseCardExample">
                         <h6 class="m-0 font-weight-bold text-lg text-primary">商品</h6>
                     </a>
-                    <!-- Card Content - Collapse -->
+
                     <div class="collapse show" id="product" style="">
                         <div class="card-body">
                             <form id="add_product" class="validate-form" method="POST">
                                 {% csrf_token %}
-                                <div class="form-group row ">
+                                <div class="form-group row">
                                     <!-- max='618107190088-1' -->
-                                    <div id="div_pdt" class="col">
-                                        <label for="inputproduct" class="text-gray-900">商品編碼</label>
+                                    <div class="col">
+                                        <label class="text-gray-900">商品編碼</label>
                                         <input type="text" name="product" id="inputproduct" class="form-control"
                                                placeholder="MA HANG">
                                     </div>
-                                    <div id="" class="col">
-                                        <label for="type" class="text-gray-900">種類</label>
-                                        <div class="row col">
-                                            <select name="type" id="input_type" class="col-sm-10 form-control">
-                                                {% for n in type_of %}
-                                                    <option>{{ n.type_of }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <a class="related-widget-wrapper-link add-related" id="add_id_type_of"
-                                               href="{% url "add_type" %}"
-                                               title="新增其它 type of"><img src="{% static "admin/img/icon-addlink.svg" %}"
-                                                                         alt="新增"></a>
-                                        </div>
+                                    <div class="col">
+                                        <label class="text-gray-900">種類</label>
+                                        <select name="type" class="form-control">
+                                            {% for n in type_of %}
+                                                <option>{{ n.type_of }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
 
-                                    <div id="div_color" class="col">
+                                    <div class="col">
                                         <!-- max = '18690'=>'BI TRANG DEN' -->
-                                        <label for="type" class="text-gray-900">顏色</label>
-                                        <input type="text" name="color" id="inputcolor" class="form-control"
+                                        <label class="text-gray-900">顏色</label>
+                                        <input type="text" name="color" class="form-control"
                                                placeholder="MAU">
                                     </div>
                                     <div class="col">
-                                        <label for="type" class="text-gray-900">單價</label>
-                                        <input type="number" name="price" id="inputprice" class="form-control"
+                                        <label class="text-gray-900">單價</label>
+                                        <input type="number" name="price" class="form-control"
                                                placeholder="GIA">
                                     </div>
                                     <div class="field-add_date col">
@@ -113,7 +108,7 @@
 
                                     <div class="col-sm-auto">
                                         <br>
-                                        <input type="submit" name="submit" class="btn btn-primary" value="送出">
+                                        <input type="submit" name="product_submit" class="btn btn-primary" value="送出">
                                     </div>
                                 </div>
 
@@ -125,7 +120,7 @@
             </div>
         </div>
 
-
+        <!-- 添加店員 Card -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card shadow mb-4">
@@ -135,13 +130,13 @@
                         <h6 class="m-0 font-weight-bold text-lg text-primary">店員</h6>
                     </a>
                     <!-- Card Content - Collapse -->
-                    <div class="collapse" id="clerk" style="">
+                    <div class="collapse" id="clerk">
                         <div class="card-body">
 
                             <form id="add_clerk" class="validate-form" method="POST">
                                 {% csrf_token %}
                                 <div class="row">
-                                    <label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">店員名字(不能重複)：</label>
+                                    <label class="col-sm-auto col-form-label text-gray-900 text-lg">店員名字(不能重複)：</label>
                                     <div class="col-sm-2">
                                         <input type="tel" name="name" class="form-control">
                                     </div>
@@ -161,6 +156,11 @@
 
 
     <script>
+        /*========預設今日日期=========*/
+        let Today=new Date();
+        $date = Today.getFullYear()+ "/" + (Today.getMonth()+1) + "/" + Today.getDate()
+        $("#id_add_date").attr("value", $date);
+
         /*=====================[ Validate ]=====================*/
         let $inputs = $('#add_product .form-control');
 
@@ -174,11 +174,6 @@
             {#        return false;#}
             {#    }#}
 
-            alert('aaaa');
-        });
-        $('#add_clerk').on('submit', function (e) {
-
-            alert('bbbb');
         });
     </script>
 {% endblock %}

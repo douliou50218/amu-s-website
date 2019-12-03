@@ -193,10 +193,21 @@ def add_new(request):
         context = {
             'type_of': type_of,
         }
-        return render(request, 'add new.html', context)
+
+    if 'product_submit' in request.POST:
+        print("aaaaa")
+        # product = All_Product()
+        # product.product_id = request.POST['type_of']
+        # product.save()
+    elif 'clerk_submit' in request.POST:
+        print("bbbbb")
+
+
+    return render(request, 'add new.html', context)
 
 
 @login_required
 def add_type(request):
-
+    if request.method == "POST":
+        TypeOf.objects.get_or_create(type_of=request.POST['type_of'])
     return render(request, 'add_type.html')
