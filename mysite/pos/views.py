@@ -200,7 +200,9 @@ def add_new(request):
         # product.product_id = request.POST['type_of']
         # product.save()
     elif 'clerk_submit' in request.POST:
-        print("bbbbb")
+        print("cccc")
+    elif 'type_submit' in request.POST:
+        TypeOf.objects.get_or_create(type_of=request.POST['type_of'])
 
 
     return render(request, 'add new.html', context)

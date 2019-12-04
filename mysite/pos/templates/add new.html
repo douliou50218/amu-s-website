@@ -43,7 +43,7 @@
                 <div class="card shadow mb-4 mt-4">
                     <!-- Card Header - Accordion -->
                     <a href="#product" class="d-block card-header py-3" data-toggle="collapse" role="button"
-                       aria-expanded="true" aria-controls="collapseCardExample">
+                       aria-expanded="true">
                         <h6 class="m-0 font-weight-bold text-lg text-primary">商品</h6>
                     </a>
 
@@ -120,6 +120,38 @@
             </div>
         </div>
 
+        <!-- 添加種類 Card -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Accordion -->
+                    <a href="#type" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button"
+                       aria-expanded="false">
+                        <h6 class="m-0 font-weight-bold text-lg text-primary">種類</h6>
+                    </a>
+                    <!-- Card Content - Collapse -->
+                    <div class="collapse" id="type">
+                        <div class="card-body">
+
+                            <form id="add_type" class="validate-form" method="POST">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <label class="col-sm-auto col-form-label text-gray-900 text-lg">添加種類(不要重複)：</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="type_of" class="form-control">
+                                    </div>
+                                    <div class="col-sm-auto">
+                                        <input type="submit" name="type_submit" class="btn btn-primary" value="送出">
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 添加店員 Card -->
         <div class="row">
             <div class="col-lg-12">
@@ -138,7 +170,7 @@
                                 <div class="row">
                                     <label class="col-sm-auto col-form-label text-gray-900 text-lg">店員名字(不能重複)：</label>
                                     <div class="col-sm-2">
-                                        <input type="tel" name="name" class="form-control">
+                                        <input type="text" name="clerk" class="form-control">
                                     </div>
                                     <div class="col-sm-auto">
                                         <input type="submit" name="clerk_submit" class="btn btn-primary" value="送出">
@@ -151,6 +183,8 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 
 
