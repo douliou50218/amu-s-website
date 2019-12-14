@@ -53,16 +53,16 @@
         </a>
 
         {% if user.is_authenticated %}
-        <!-- next={request.path}可以讓使用者在登出之後，回到當初同一個畫面 -->
-        <li class="nav-item pb-2">
-            <span class="pl-3 text-warning">User: {{ user.get_username }}</span>
-            <a class="pl-3 text-danger" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
-        </li>
+            <!-- next={request.path}可以讓使用者在登出之後，回到當初同一個畫面 -->
+            <li class="nav-item pb-2">
+                <span class="pl-3 text-warning">User: {{ user.get_username }}</span>
+                <a class="pl-3 text-danger" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+            </li>
         {% else %}
-        <!-- next={request.path}可以讓使用者在登入成功之後，回到當初同一個畫面 -->
-        <li class="nav-item">
-            <a class="pl-3 text-warning" href="{% url 'login'%}?next={{request.path}}">Login</a>
-        </li>
+            <!-- next={request.path}可以讓使用者在登入成功之後，回到當初同一個畫面 -->
+            <li class="nav-item">
+                <a class="pl-3 text-warning" href="{% url 'login'%}?next={{request.path}}">Login</a>
+            </li>
         {% endif %}
 
 

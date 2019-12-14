@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import All_Product, Clerk, Customer, Sales_Record, TodayRecord, TypeOf
 from django.http import HttpResponse
 from django.contrib import auth  # 別忘了import auth
+from django.contrib.auth.models import User  #記得要先導入套件
 
 
 def login(request):
@@ -16,11 +17,13 @@ def login(request):
 
     user = auth.authenticate(username=username, password=password)
 
+    account = User.objects.all()
+    print(account)
     if user is not None and user.is_active:
         auth.login(request, user)
         return HttpResponseRedirect('/')
     else:
-        return render_to_response('login.html')
+        return render(request, 'login.html', {'account': account, })
 
 
 def logout(request):
@@ -200,7 +203,7 @@ def add_new(request):
         # product.product_id = request.POST['type_of']
         # product.save()
     elif 'clerk_submit' in request.POST:
-        print("cccc")
+        Clerk.objects.get_or_create(clerk_name=request.POST['clerk'])
     elif 'type_submit' in request.POST:
         TypeOf.objects.get_or_create(type_of=request.POST['type_of'])
 

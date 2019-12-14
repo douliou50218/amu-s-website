@@ -15,9 +15,14 @@ Login
 		<h1 class="h1 mb-0">登入</h1>
         <br>
 	</div>
-    <form action="" method="post" class="validate-form">
+    <form action="" method="POST" class="validate-form">
         {% csrf_token %}
         <label for="username" class="text-lg">用戶名稱:</label>
+        <select name="clerk" id="input_password">
+            {% for n in account %}
+            <option>{{ n.username }}</option>
+            {% endfor %}
+        </select>
         <input type="text" name="username" value="" id="username"> <br/>
         <label for="password" class="text-lg">用戶密碼:</label>
         <input type="password" name="password" value="" id="password"> <br/><br/>
