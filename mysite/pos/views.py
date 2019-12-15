@@ -9,17 +9,16 @@ from django.contrib.auth.models import User  #記得要先導入套件
 
 
 def login(request):
-    if request.user.is_authenticated():
-        print("aaa")
-        return HttpResponseRedirect('/')
+    # if request.user.is_authenticated():
+    #     return HttpResponseRedirect('/')
 
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
 
     user = auth.authenticate(username=username, password=password)
 
+    print("aaa")
     account = User.objects.all()
-    print("aaa" + account)
     if user is not None and user.is_active:
         auth.login(request, user)
         return HttpResponseRedirect('/')
@@ -190,7 +189,6 @@ def sold_today(request):
 
 @login_required
 def add_new(request):
-
     type_of = TypeOf.objects.all()
 
     context = {
