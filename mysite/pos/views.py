@@ -1,16 +1,16 @@
-from django.shortcuts import render, render_to_response, redirect
-from django.http import JsonResponse, HttpResponseRedirect
-from django.db import connection
-from django.contrib.auth.decorators import login_required
-from .models import All_Product, Clerk, Customer, Sales_Record, TodayRecord, TypeOf
-from django.http import HttpResponse
 from django.contrib import auth  # 別忘了import auth
-from django.contrib.auth.models import User  #記得要先導入套件
+from django.db import connection
+from django.shortcuts import render
+from django.contrib.auth.models import User  # 記得要先導入套件
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponseRedirect
+
+from .models import All_Product, Clerk, Customer, Sales_Record, TodayRecord, TypeOf
 
 
 def login(request):
-    # if request.user.is_authenticated():
-    #     return HttpResponseRedirect('/')
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/')
 
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
@@ -28,7 +28,7 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return HttpResponseRedirect('/index/')
+    return HttpResponseRedirect('/')
 
 
 def index(request):
