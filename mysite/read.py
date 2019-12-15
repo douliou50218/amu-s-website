@@ -1,18 +1,25 @@
-import xlrd
 from datetime import datetime
 from xlrd import xldate_as_tuple
+from typing import List, Set, Dict
+
 import re
+import os
+import xlrd
+
+sheet_tables = List[xlrd.sheet.Sheet]
 
 
-def get_file():
-    data = xlrd.open_workbook(r'E:\amu-s-website\BANG TON KHO th6-2019.xlsx')
+def get_file() -> sheet_tables:
+    dirname = os.path.dirname(__file__)
+    filename = os.path.join(dirname, 'BANG TON KHO th6-2019.xlsx')
+    data = xlrd.open_workbook(filename)
     tables = []
     for i in range(0, 10):
         tables.append(data.sheet_by_name(f"{i}"))
     return tables
 
 
-def get_all_type(tables):
+def get_all_type(tables: sheet_tables) -> Set[str]:
     all_type = set()
     for table in tables:
         for row in range(4, table.nrows):
@@ -21,7 +28,7 @@ def get_all_type(tables):
     return all_type
 
 
-def add_products(tables):
+def add_products(tables: sheet_tables) -> List[Dict]:
     all_product = []
 
     for table in tables:
@@ -39,14 +46,17 @@ def add_products(tables):
 
                 remark = ''
                 i = 0
-                while not (table.cell(row + i, 4).value == 'TONG' or table.cell(row + i, 5).value == 'NGAY' or table.cell(row + i, 19).value == 'NGAY'):
+                while not (
+                        table.cell(row + i, 4).value == 'TONG' or table.cell(row + i, 5).value == 'NGAY' or table.cell(
+                    row + i, 19).value == 'NGAY'):
                     if not remark:
                         remark = data_process(table.cell(row + i, 4))
                     elif remark and data_process(table.cell(row + i, 4)):
                         remark += ',' + data_process(table.cell(row + i, 4))
                     i += 1
 
-            if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY':
+            if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row,
+                                                                                                      19).value == 'NGAY':
                 continue
 
             date_text = ''
@@ -85,7 +95,8 @@ def sold_products(tables):
                     product_dict['product_id'] = table.cell(row, 0).value
                 product_dict['color'] = get_color(table.cell(row, 2).value)
 
-            if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row, 19).value == 'NGAY':
+            if table.cell(row, 4).value == 'TONG' or table.cell(row, 5).value == 'NGAY' or table.cell(row,
+                                                                                                      19).value == 'NGAY':
                 product_flag = False
                 continue
 

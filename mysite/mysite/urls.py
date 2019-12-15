@@ -15,14 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-#line用的
+# line用的
 from django.conf.urls import url
 from line_bot import views
 
 urlpatterns = [
     path('', include('pos.urls')),
     path('admin/', admin.site.urls),
-    url(r'^', include('django.contrib.auth.urls')),
-    #line用的
+    # line用的
     url('^callback', views.callback),
 ]
