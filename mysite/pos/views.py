@@ -28,7 +28,7 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return HttpResponseRedirect('/index/')
+    return HttpResponseRedirect('/')
 
 
 def index(request):

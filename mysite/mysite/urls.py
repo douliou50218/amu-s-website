@@ -22,7 +22,6 @@ from line_bot import views
 urlpatterns = [
     path('', include('pos.urls')),
     path('admin/', admin.site.urls),
-    url(r'^', include('django.contrib.auth.urls')),
     #line用的
     url('^callback', views.callback),
 ]

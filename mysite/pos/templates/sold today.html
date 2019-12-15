@@ -49,50 +49,48 @@ Sold today
 					<form id="sale" class="validate-form" method="POST">
 						{% csrf_token %}
 						<div class="form-group row">
-							<label class="col-sm-1 col-form-label text-gray-900 text-lg">商品</label>
+							<label class="col-sm-2 col-xl-1 col-form-label text-gray-900 text-lg">商品</label>
 							<!-- max='618107190088-1' -->
-							<div id="div_pdt" class="col-sm-auto">
-								<input type="text" name="product" id="input_product" class="form-control"
-									placeholder="MA HANG">
+							<div id="div_pdt" class="col-md-6 col-xl-3">
+								<input type="text" name="product" id="input_product" class="form-control" placeholder="MA HANG">
 							</div>
-							<div id="div_color" class="col-sm-2">
+							<div id="div_color" class="col-md-4 col-xl-2">
 							<!-- max = '18690'=>'BI TRANG DEN' -->
-								<select name="color" id="input_color" class="form-control text-gray-500" disabled>
+								<select name="color" id="input_color" class="form-control text-gray-500" disabled="">
 									<option>MAU</option>
 								</select>
 							</div>
-							<div class="col-sm-2">
-								<select name="size" id="input_size" class="form-control text-gray-500" disabled>
+							<div class="offset-md-2 col-md-3 offset-xl-0 col-xl-2">
+								<select name="size" id="input_size" class="form-control text-gray-500" disabled="">
 									<option>size</option>
 								</select>
 							</div>
-							<div class="col-sm-2">
-								<select name="count" id="input_count" class="form-control text-gray-500" disabled>
+							<div class="col-md-3 col-xl-2">
+								<select name="count" id="input_count" class="form-control text-gray-500" disabled="">
 									<option>count</option>
 								</select>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-md-4 col-xl-2">
 								<input type="number" name="price" id="input_price" class="form-control" placeholder="GIA">
 							</div>
 						</div>
 						<div class="row">
-							<label for="input_clerk" class="col-sm-1 col-form-label text-gray-900 text-lg">店員</label>
-							<div class="col">
-								<select name="clerk" id="input_clerk" class="col form-control">
-									{% for n in clerk %}
-									<option>{{ n.clerk_name }}</option>
-									{% endfor %}
-								</select>
-							</div>
-							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">客人電話</label>
-							<div class="col">
+
+							<label for="" class="col-md-3 col-xl-1 col-form-label text-gray-900 text-lg">客人電話</label>
+							<div class="col-md-9 col-xl-3">
 								<input type="tel" name="phone" id="input_phone" class="form-control">
 							</div>
-							<div class="col-sm-auto offset-sm-2">
-								<button type="reset" class="btn btn-secondary">Clear</button>
+							<label for="input_clerk" class="col-md-3 col-xl-1 col-form-label text-gray-900 text-lg">店員</label><div class="col">
+								<select name="clerk" id="input_clerk" class="col form-control">
+
+									<option>aaa</option>
+
+								</select>
+							</div><div class="col-sm-auto">
+								<button type="reset" class="col-12 btn btn-secondary">Clear</button>
 							</div>
 							<div class="col-sm-auto">
-								<input type="submit" name="submit" class="btn btn-primary" value="Submit">
+								<input type="submit" name="submit" class="col-12 btn btn-primary" value="Submit">
 							</div>
 						</div>
 
@@ -103,7 +101,7 @@ Sold today
 		</div>
 	</div>
 
-	<!-- 換貨區 -->
+    <!-- 換貨區 -->
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="card shadow mb-4">
@@ -127,37 +125,41 @@ Sold today
 				</script>
 
 				<!-- Card Content - Collapse -->
-				<div class="collapse" id="return" style="">
-				<div class="card-body">
+				<div class="collapse card-body" id="return" style="">
 					<form class="validate-form" method="POST">
 						{% csrf_token %}
-						<div class="form-group row ">
-							<label class="col-sm-1 col-form-label text-gray-900 text-lg">商品</label>
-							<!-- max='618107190088-1' -->
-							<div id="div_pdt" class="col">
-								<input type="text" name="product" id="return_product" class="form-control"
-									placeholder="MA HANG">
-							</div>
-							<div class="col-sm-auto">
-								<input type="submit" name="submit" class="btn btn-primary" value="搜尋">
-							</div>
-
-							<label for="" class="col-sm-auto col-form-label text-gray-900 text-lg">客人電話</label>
-							<div class="col">
-								<input type="tel" name="phone" id="returnphone" class="form-control">
-							</div>
-							<div class="col-sm-auto">
-								<input type="submit" name="submit" class="btn btn-primary" value="搜尋">
-							</div>
+						<div class="form-group row">
+                            <div class="col-lg-5">
+                                <div class="row">
+                                    <label class="col-sm-2 col-lg-3 col-xl-2 col-form-label text-gray-900 text-lg">商品</label>
+                                    <!-- max='618107190088-1' -->
+                                    <div class="col-sm-8 col-lg-6 col-xl-8">
+                                        <input type="text" name="product" id="return_product" class="form-control"
+                                            placeholder="MA HANG">
+                                    </div>
+                                    <div class="col-sm-2 col-lg-3 col-xl-2">
+                                        <input type="submit" name="submit" class="btn btn-primary" value="搜尋">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="row">
+                                    <label for="" class="col-sm-3 col-lg-3 col-xl-2 col-form-label text-gray-900 text-lg">客人電話</label>
+                                    <div class="col-sm-7 col-lg-6 col-xl-8">
+                                        <input type="tel" name="phone" id="returnphone" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2 col-lg-3 col-xl-2">
+                                        <input type="submit" name="submit" class="btn btn-primary" value="搜尋">
+                                    </div>
+                                </div>
+                            </div>
 						</div>
 
 					</form>
 				</div>
-				</div>
 			</div>
 		</div>
 	</div>
-
 
 	<div class="row">
 		<div class="col-lg-12">
@@ -166,8 +168,7 @@ Sold today
 				<div class="card-header py-3 ">
 					<h6 class="m-0 font-weight-bold text-primary">Ghi lại</h6>
 					<!-- Modal -->
-					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-						aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -196,20 +197,46 @@ Sold today
 						</thead>
 
 						<tbody>
-							{% for n,i in record %}
+
 							<tr>
-								<td>{{ n }}</td>
-								<td>{{ i.product }}</td>
-								<td>{{ i.product.size }}</td>
-								<td>{{ i.product.color | default_if_none:"" }}</td>
-								<td>{{ i.sell_count }}</td>
-								<td>{{ i.base_price }}</td>
-								<td>{{ i.sell_price | default_if_none:"" }}</td>
-								<td>{{ i.customer | default_if_none:"" }}</td>
-								<td>{{ i.clerk }}</td>
-								<td><a href="" name="{{ n }}" class="delete btn btn-danger btn-circle "><i class="fas fa-trash"></i></a></td>
+								<td>1</td>
+								<td>0068</td>
+								<td>27</td>
+								<td>XANH</td>
+								<td>1</td>
+								<td>340</td>
+								<td>644</td>
+								<td></td>
+								<td>aaa</td>
+								<td><a href="" name="1" class="delete btn btn-danger btn-circle "><i class="fas fa-trash"></i></a></td>
 							</tr>
-							{% endfor %}
+
+							<tr>
+								<td>2</td>
+								<td>A1139</td>
+								<td>29</td>
+								<td>DEN</td>
+								<td>1</td>
+								<td>450</td>
+								<td>110</td>
+								<td>55668877</td>
+								<td>aaa</td>
+								<td><a href="" name="2" class="delete btn btn-danger btn-circle "><i class="fas fa-trash"></i></a></td>
+							</tr>
+
+							<tr>
+								<td>3</td>
+								<td>18A1066</td>
+								<td>27</td>
+								<td>NAU</td>
+								<td>1</td>
+								<td>270</td>
+								<td>230</td>
+								<td></td>
+								<td>aaa</td>
+								<td><a href="" name="3" class="delete btn btn-danger btn-circle "><i class="fas fa-trash"></i></a></td>
+							</tr>
+
 
 						</tbody>
 
@@ -229,7 +256,7 @@ Sold today
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">總數 (件)</div>
-							<div class="h5 mb-0 font-weight-bold text-gray-800">{{ rcd_length }}</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
 						</div>
 						<div class="col-auto">
 							<i class="fas fa-check fa-2x text-gray-300"></i>
@@ -247,7 +274,7 @@ Sold today
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
 								總金額 (K)</div>
-							<div class="h5 mb-0 font-weight-bold text-gray-800">${{ rcd_money }}</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">$984</div>
 						</div>
 						<div class="col-auto">
 							<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -257,16 +284,17 @@ Sold today
 			</div>
 		</div>
 
-		<div class="col-xl-3 col-md-6 mt-4 mb-2">
-			<a href="#" class="btn btn-primary btn-icon-split" style="position: absolute; bottom: 0;">
-				<span class="icon text-white-50">
-					<i class="fas fa-arrow-right"></i>
-				</span>
-				<span class="text">確認送出</span>
-			</a>
-		</div>
+    </div>
 
-	</div>
+    <div class="row mt-3 mr-0 mb-5 ml-0">
+        <a href="#" class="col-12 btn btn-primary btn-icon-split btn-lg">
+            <span class="icon text-white-50">
+                <i class="fas fa-arrow-right"></i>
+            </span>
+            <span class="text">確認送出</span>
+        </a>
+    </div>
+
 
 </div>
 
