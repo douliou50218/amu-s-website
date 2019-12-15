@@ -10,6 +10,7 @@ from django.contrib.auth.models import User  #記得要先導入套件
 
 def login(request):
     if request.user.is_authenticated():
+        print("aaa")
         return HttpResponseRedirect('/')
 
     username = request.POST.get('username', '')
@@ -18,7 +19,7 @@ def login(request):
     user = auth.authenticate(username=username, password=password)
 
     account = User.objects.all()
-    print(account)
+    print("aaa" + account)
     if user is not None and user.is_active:
         auth.login(request, user)
         return HttpResponseRedirect('/')
@@ -187,15 +188,14 @@ def sold_today(request):
     return render(request, 'sold today.html', context)
 
 
+@login_required
 def add_new(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    else:
-        type_of = TypeOf.objects.all()
 
-        context = {
-            'type_of': type_of,
-        }
+    type_of = TypeOf.objects.all()
+
+    context = {
+        'type_of': type_of,
+    }
 
     if 'product_submit' in request.POST:
         print("aaaaa")
@@ -206,7 +206,6 @@ def add_new(request):
         Clerk.objects.get_or_create(clerk_name=request.POST['clerk'])
     elif 'type_submit' in request.POST:
         TypeOf.objects.get_or_create(type_of=request.POST['type_of'])
-
 
     return render(request, 'add new.html', context)
 
