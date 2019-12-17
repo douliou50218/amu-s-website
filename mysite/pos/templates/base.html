@@ -46,10 +46,13 @@
 
         <!-- 上方logo -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url "index" %}">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <img src="{% static "img/logo.png" %}" height="64px">
+            <div class="sidebar-brand-icon mr-2">
+                <img src="{% static "img/logo.png" %}" height="48px">
             </div>
-            <div class="sidebar-brand-text mx-3">Shop PhaLe</div>
+{#            <div class="sidebar-brand-text mx-3">PhaLe<sup><i class="far fa-registered"></i></sup></div>#}
+
+            <img src="{% static "img/Phale.png" %}" width="112px">
+{#            <div class="sidebar-brand-text mx-3">PhaLe<sup>®</sup></div>#}
         </a>
 
         {% if user.is_authenticated %}
