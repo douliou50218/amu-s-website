@@ -49,22 +49,22 @@
             <div class="sidebar-brand-icon mr-2">
                 <img src="{% static "img/logo.png" %}" height="48px">
             </div>
-{#            <div class="sidebar-brand-text mx-3">PhaLe<sup><i class="far fa-registered"></i></sup></div>#}
 
-            <img src="{% static "img/Phale.png" %}" width="112px">
+            <img class="sidebar-brand-text" src="{% static "img/Phale.png" %}" width="112px">
+{#            <div class="sidebar-brand-text mx-3">PhaLe<sup><i class="far fa-registered"></i></sup></div>#}
 {#            <div class="sidebar-brand-text mx-3">PhaLe<sup>®</sup></div>#}
         </a>
 
         {% if user.is_authenticated %}
             <!-- next={request.path}可以讓使用者在登出之後，回到當初同一個畫面 -->
             <li class="nav-item pb-2">
-                <span class="pl-3 text-warning">User: {{ user.get_username }}</span>
-                <a class="pl-3 text-danger" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+                <span class="pl-3 text-success font-weight-bold">{{ user.get_username }}</span>
+                <a class="pl-3 text-secondary" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
             </li>
         {% else %}
             <!-- next={request.path}可以讓使用者在登入成功之後，回到當初同一個畫面 -->
             <li class="nav-item">
-                <a class="pl-3 text-warning" href="{% url 'login'%}?next={{request.path}}">Login</a>
+                <a class="pl-3 text-success font-weight-bold" href="{% url 'login'%}?next={{request.path}}">Login</a>
             </li>
         {% endif %}
 
