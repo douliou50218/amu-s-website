@@ -150,10 +150,10 @@ def sold_today(request):
 
     customer = Customer.objects.all()
     stock_products = All_Product.objects.exclude(quantity=0)
-    all_pdtid = []
+    all_id = []
     for i in stock_products:
-        if i.product_id not in all_pdtid:
-            all_pdtid.append(i.product_id)
+        if i.product_id not in all_id:
+            all_id.append(i.product_id)
     clerk = Clerk.objects.all()
 
     # 退貨時商品搜尋
@@ -162,26 +162,24 @@ def sold_today(request):
                 FROM pos_Sales_Record as psr
                 JOIN pos_All_Product as pap on psr.product_id = pap.id''')
         sold_products = c.fetchall()
-    sold_pdtid = []
+    sold_id = []
     for i in sold_products:
-        if i[0] not in sold_pdtid:
-            sold_pdtid.append(i[0])
+        if i[0] not in sold_id:
+            sold_id.append(i[0])
     # 結算
-    record = TodayRecord.objects.all()
-    rcd_money = 0
-    rcd_length = 0
-    for i in record:
-        rcd_money += i.sell_price
-        rcd_length += i.sell_count
+    today_sold = TodayRecord.objects.all()
+    sold_money = 0
+    for i in today_sold:
+        sold_money += i.sell_price
 
     context = {
-        'all_pdtid': all_pdtid,
+        'all_id': all_id,
         'customer': customer,
         'clerk': clerk,
-        'sold_pdtid': sold_pdtid,
-        'record': zip(range(1, len(record) + 1), record),
-        'rcd_money': rcd_money,
-        'rcd_length': rcd_length,
+        'sold_id': sold_id,
+        'today_sold': zip(range(1, len(today_sold) + 1), today_sold),
+        'sold_money': sold_money,
+        'sold_count': len(today_sold),
     }
 
     return render(request, 'sold today.html', context)
@@ -207,9 +205,3 @@ def add_new(request):
 
     return render(request, 'add new.html', context)
 
-
-@login_required
-def add_type(request):
-    if request.method == "POST":
-        TypeOf.objects.get_or_create(type_of=request.POST['type_of'])
-    return render(request, 'add_type.html')

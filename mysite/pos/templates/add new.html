@@ -81,7 +81,7 @@
                                     <div class="field-add_date col">
                                         <label for="id_add_date" class="text-gray-900">日期</label>
                                         <input type="text" name="add_date" id="id_add_date"
-                                               class="vDateField form-control col-sm-auto" size="10" required="">
+                                               class="vDateField form-control col-sm-auto" size="10" required="" value="{% now 'Y/m/d' %}">
                                     </div>
                                 </div>
 
@@ -189,12 +189,7 @@
 
 
 
-    <script>
-        /*========預設今日日期=========*/
-        let Today=new Date();
-        $date = Today.getFullYear()+ "/" + (Today.getMonth()+1) + "/" + Today.getDate()
-        $("#id_add_date").attr("value", $date);
-
+    <script
         /*=====================[ Validate ]=====================*/
         let $inputs = $('#add_product .form-control');
 

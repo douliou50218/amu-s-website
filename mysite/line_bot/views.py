@@ -12,6 +12,7 @@ from linebot.models import MessageEvent, TextSendMessage, ImageSendMessage
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
+
 @csrf_exempt
 def callback(request):
     if request.method == 'POST':
@@ -29,8 +30,8 @@ def callback(request):
                 sent_text = event.message.text
                 if '圖片' in sent_text:
                     message = ImageSendMessage(
-                        original_content_url = "https://i.imgur.com/W3dr1I5.jpg",    #原始圖片網址
-                        preview_image_url = 'https://i.imgur.com/W3dr1I5.jpg'    #預覽圖片網址
+                        original_content_url="https://i.imgur.com/W3dr1I5.jpg",  # 原始圖片網址
+                        preview_image_url='https://i.imgur.com/W3dr1I5.jpg'  # 預覽圖片網址
                     )
                 else:
                     message = TextSendMessage(
