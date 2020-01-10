@@ -59,9 +59,14 @@ Still in stock
 							<tbody>
 								{% for product in stock_products %}
 								<tr>
-									{% for n in product %}
-										<td>{{ n | default_if_none:"" }}</td>
-									{% endfor %}
+                                    <td>{{ product.0 | default_if_none:"" }}</td>
+                                    <td>{{ product.1 | default_if_none:"" }}</td>
+                                    <td>{{ product.2 | default_if_none:"" }}</td>
+                                    <td>{{ product.3 | default_if_none:"" }}</td>
+                                    <td>{{ product.4 | default_if_none:"" }}</td>
+                                    <td>{{ product.5 | date:'Y/m/d' }}</td>
+                                    <td>{{ product.6 | default_if_none:"" }}</td>
+                                    <td>{{ product.7 | default_if_none:"" }}</td>
 								</tr>
 								{% endfor %}
 							</tbody>

@@ -64,13 +64,21 @@ Already Sold
 							<tbody>
 								{% for product in sold_products %}
 									<tr>
-										{% for i in product %}
-											{% if i == -1487 %}
-												<td></td>
-											{% else %}
-												<td>{{ i | default_if_none:"" }}</td>
-											{% endif %}
-										{% endfor %}
+										<td>{{ product.0 | default_if_none:"" }}</td>
+                                        <td>{{ product.1 | default_if_none:"" }}</td>
+                                        <td>{{ product.2 | default_if_none:"" }}</td>
+                                        <td>{{ product.3 | default_if_none:"" }}</td>
+                                        <td>{{ product.4 | default_if_none:"" }}</td>
+                                        <td>{{ product.5 | date:'Y/m/d' }}</td>
+                                        <td>{{ product.6 | default_if_none:"" }}</td>
+                                        {% if product.7 == -1000 %}
+                                            <td></td>
+                                        {% else %}
+                                            <td>{{ product.7 }}</td>
+                                        {% endif %}
+                                        <td>{{ product.8 | default_if_none:"" }}</td>
+                                        <td>{{ product.9 | default_if_none:"" }}</td>
+                                        <td>{{ product.10 | default_if_none:"" }}</td>
 									</tr>
 								{% endfor %}
 							</tbody>

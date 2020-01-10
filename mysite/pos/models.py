@@ -1,20 +1,14 @@
 from django.db import models
 import datetime
 
+
 # Create your models here.
-SIZE_CHOICES = (
-    (23, 'F'),
-    (25, '25 XS'),
-    (26, '26 S'),
-    (27, '27 M'),
-    (28, '28 L'),
-    (39, '39 XL'),
-    (30, '30 2XL'),
-    (31, '31 3XL'),
-    (32, '32 4XL'),
-    (33, '5XL'),
-    (34, '6XL'),
-)
+class Size(models.Model):
+    number = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=7)
+
+    def __str__(self):
+        return str(self.number)
 
 
 class TypeOf(models.Model):
@@ -50,8 +44,9 @@ class All_Product(models.Model):
         default=datetime.date.today().strftime("%Y-%m-%d"),
         null=True,
     )
-    size = models.IntegerField(
-        choices=SIZE_CHOICES
+    size = models.ForeignKey(
+        Size,
+        models.PROTECT,
     )
     price = models.IntegerField(default=0)
     remarks = models.CharField(

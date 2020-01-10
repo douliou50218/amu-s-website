@@ -66,9 +66,10 @@ def index(request):
 
 def storage(request):
     with connection.cursor() as c:
-        c.execute('''SELECT product_id, type_of_id, color, size, quantity, add_date, price, remarks 
-            FROM pos_all_product 
-            WHERE NOT quantity = 0''')
+        c.execute('''SELECT par.product_id, par.type_of_id, par.color, ps.name, par.quantity, par.add_date, par.price, par.remarks
+            FROM pos_all_product as par
+            JOIN pos_size as ps on par.size_id = ps.number
+            WHERE NOT par.quantity = 0''')
         stock_products = c.fetchall()
 
     context = {
@@ -79,10 +80,10 @@ def storage(request):
 
 def already_sold(request):
     with connection.cursor() as c:
-        c.execute('''SELECT
-                pap.product_id, pap.type_of_id, pap.color, pap.size, psr.sale_date, psr.clerk_id, pap.price, psr.sell_price, psr.sell_count, psr.customer_id, pap.remarks
+        c.execute('''SELECT pap.product_id, pap.type_of_id, pap.color, ps.name, psr.sale_date, psr.clerk_id, pap.price, psr.sell_price, psr.sell_count, psr.customer_id, pap.remarks
             FROM pos_Sales_Record as psr
-            JOIN pos_All_Product as pap on psr.product_id = pap.id''')
+            JOIN pos_All_Product as pap on psr.product_id = pap.id
+            JOIN pos_size as ps on pap.size_id = ps.number''')
         sold_products = c.fetchall()
 
     context = {
@@ -158,9 +159,10 @@ def sold_today(request):
 
     # 退貨時商品搜尋
     with connection.cursor() as c:
-        c.execute('''SELECT pap.product_id, pap.color, pap.size, psr.sale_date, psr.sell_price, psr.sell_count, psr.customer_id
+        c.execute('''SELECT pap.product_id, pap.color, ps.name, psr.sale_date, psr.sell_price, psr.sell_count, psr.customer_id
                 FROM pos_Sales_Record as psr
-                JOIN pos_All_Product as pap on psr.product_id = pap.id''')
+                JOIN pos_All_Product as pap on psr.product_id = pap.id
+                JOIN pos_size as ps on pap.size_id = ps.number''')
         sold_products = c.fetchall()
     sold_id = []
     for i in sold_products:

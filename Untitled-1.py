@@ -16,6 +16,25 @@ for i in sold_product:
 from pos.models import *
 import read
 
+aaa = (
+    (23, 'F'),
+    (25, '25 XS'),
+    (26, '26 S'),
+    (27, '27 M'),
+    (28, '28 L'),
+    (29, '39 XL'),
+    (30, '30 2XL'),
+    (31, '31 3XL'),
+    (32, '32 4XL'),
+    (33, '5XL'),
+    (34, '6XL'),
+)
+for i in aaa:
+	size = Size(number=i[0], name=i[1])
+	size.save()
+
+
+
 tables=read.get_file()
 all_type = read.get_all_type(tables)
 
@@ -30,7 +49,7 @@ for i in all_product:
 	pd.color = i['color']
 	if 'add_date' in i:
 		pd.add_date = i['add_date']
-	pd.size = i['size']
+	pd.size = Size.objects.get(number=i['size'])
 	pd.price = i['price']
 	pd.remarks = i['remarks']
 	pd.quantity = i['quantity']
@@ -44,7 +63,7 @@ sold_product=read.sold_products(tables)
 
 for sold in sold_product:
 	#_gt 大於 __gte 大於等於 __lt 小於 __lte 小於等於
-	sold_pdts = All_Product.objects.filter(product_id=sold['product_id'], color=sold['color'], size=sold['size'])
+	sold_pdts = All_Product.objects.filter(product_id=sold['product_id'], color=sold['color'], size=Size.objects.get(number=sold['size']))
 	if sold_pdts:
 		sold_pdt = sold_pdts[0]
 		sold_pdt.quantity -= sold['sell_count']
@@ -57,7 +76,7 @@ for sold in sold_product:
 			if product[0].type_of:
 				pd.type_of = product[0].type_of
 			pd.color = sold['color']
-			pd.size = sold['size']
+			pd.size = Size.objects.get(number=sold['size'])
 			pd.price = product[0].price
 			pd.remarks = product[0].remarks
 			pd.quantity = 0-sold['sell_count']

@@ -2,13 +2,10 @@ import xlrd
 from datetime import datetime
 from xlrd import xldate_as_tuple
 import re
-import os
 
 
-def get_file(filename='BANG TON KHO th6-2019.xlsx'):
-    dirname = os.path.dirname(__file__)
-    filepath = os.path.join(dirname, filename)
-    data = xlrd.open_workbook(filepath)
+def get_file():
+    data = xlrd.open_workbook(r'E:\amu-s-website\BANG TON KHO th6-2019.xlsx')
     tables = []
     for i in range(0, 10):
         tables.append(data.sheet_by_name(f"{i}"))
