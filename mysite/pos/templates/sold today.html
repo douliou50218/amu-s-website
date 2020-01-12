@@ -99,7 +99,8 @@
                                     <button type="reset" class="col-12 btn btn-secondary">Clear</button>
                                 </div>
                                 <div class="col-sm-auto">
-                                    <input type="submit" name="submit" class="col-12 btn btn-primary" value="Submit">
+                                    <input type="submit" name="sell_submit" class="col-12 btn btn-primary"
+                                           value="Submit">
                                 </div>
                             </div>
 
@@ -172,6 +173,7 @@
             </div>
         </div>
 
+        <!-- 售出表格 -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card shadow mb-4">
@@ -180,11 +182,11 @@
                         <h6 class="m-0 font-weight-bold text-primary">Ghi lại</h6>
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                             aria-labelledby="show_table" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <h5 class="modal-title" id="show_table">Modal title</h5>
                                     </div>
                                 </div>
                             </div>
@@ -194,18 +196,18 @@
                     <div class="card-body">
                         <table class="table table-bordered table-hover">
                             <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">MA HANG</th>
-                                    <th scope="col">SIZE</th>
-                                    <th scope="col">MAU</th>
-                                    <th scope="col">數量</th>
-                                    <th scope="col">原價</th>
-                                    <th scope="col">售價</th>
-                                    <th scope="col">PHONE</th>
-                                    <th scope="col">店員</th>
-                                    <th scope="col" class="text-danger" style="width: 3rem;">Xóa</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">MA HANG</th>
+                                <th scope="col">SIZE</th>
+                                <th scope="col">MAU</th>
+                                <th scope="col">數量</th>
+                                <th scope="col">原價</th>
+                                <th scope="col">PHONE</th>
+                                <th scope="col">店員</th>
+                                <th scope="col">總價</th>
+                                <th scope="col" class="text-danger" style="width: 3rem;">Xóa</th>
+                            </tr>
                             </thead>
 
                             <tbody>
@@ -217,10 +219,10 @@
                                     <td>{{ i.product.size }}</td>
                                     <td>{{ i.product.color | default_if_none:"" }}</td>
                                     <td>{{ i.sell_count }}</td>
-                                    <td>{{ i.sell_price | default_if_none:"" }}</td>
                                     <td>{{ i.base_price | default_if_none:"" }}</td>
                                     <td>{{ i.customer | default_if_none:"" }}</td>
                                     <td>{{ i.clerk }}</td>
+                                    <td>{{ i.sell_price | default_if_none:"" }}</td>
                                     <td><a href="" name={{ n }} class="delete btn btn-danger btn-circle"><i
                                             class="fas fa-trash"></i></a></td>
                                 </tr>
@@ -276,12 +278,34 @@
         </div>
 
         <div class="row mt-3 mr-0 mb-5 ml-0">
-            <a href="#" class="col-12 btn btn-primary btn-icon-split btn-lg">
-            <span class="icon text-white-50">
-                <i class="fas fa-arrow-right"></i>
-            </span>
+            <!-- Button trigger modal -->
+            <a href="" name="check_submit" class="col-12 btn btn-primary btn-icon-split btn-lg" data-toggle="modal" data-target="#checkModal">
+                <span class="icon text-white-50">
+                    <i class="fas fa-arrow-right"></i>
+                </span>
                 <span class="text">確認送出</span>
             </a>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModal" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="checkModal">確認送出?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                ...
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
         </div>
 
 
@@ -306,14 +330,7 @@
             return true;
         });
 
-        $('.validate-form').on('reset', function () {
-            $('select:not(#input_clerk)  option').remove();
-            $("<option></option>").text('MAU').appendTo('#input_color');
-            $("<option></option>").text('size').appendTo('#input_size');
-            $("<option></option>").text('count').appendTo('#input_count');
-            $('select:not(#input_clerk)').attr("disabled", "true");
-        });
-
+         /*=====================當日商品刪除確認=====================*/
         $('.delete').click(function (e) {
             let check = confirm("確定刪除嗎?");
             if (check) {
@@ -335,6 +352,26 @@
 
             return true;
         })
+
+        /*=====================確認送出=====================*/
+        $('a　#btn-icon-split').click(function (e) {
+            let check = confirm("確定刪除嗎?");
+            if (!check) {
+                e.preventDefault();
+                return false;
+
+            }
+            return true;
+        })
+
+        /*=====================商品選擇=====================*/
+        $('.validate-form').on('reset', function () {
+            $('select:not(#input_clerk)  option').remove();
+            $("<option></option>").text('MAU').appendTo('#input_color');
+            $("<option></option>").text('size').appendTo('#input_size');
+            $("<option></option>").text('count').appendTo('#input_count');
+            $('select:not(#input_clerk)').attr("disabled", "true");
+        });
 
         $('#input_product').on("input blur focus", function () {
             $.ajax({

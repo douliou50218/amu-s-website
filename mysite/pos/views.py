@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response, redirect
 from django.http import JsonResponse, HttpResponseRedirect
 from django.db import connection
 from django.contrib.auth.decorators import login_required
-from .models import All_Product, Clerk, Customer, Sales_Record, TodayRecord, TypeOf
+from .models import All_Product, Clerk, Customer, Sales_Record, TodayRecord, TypeOf, Size
 from django.http import HttpResponse
 from django.contrib import auth  # 別忘了import auth
 from django.contrib.auth.models import User  #記得要先導入套件
@@ -117,8 +117,8 @@ def sold_today(request):
 
             if search_product:
                 for product in search_product:
-                    if product.size not in size:
-                        size.append(product.size)
+                    if product.size.name not in size:
+                        size.append(product.size.name)
 
             response = JsonResponse({"repeat": size})
 
@@ -126,7 +126,7 @@ def sold_today(request):
 
             product = request.POST.get('product')
             color = request.POST.get('color')
-            size = request.POST.get('size')
+            size = Size.objects.get(name=request.POST.get('size'))
             search_count = All_Product.objects.get(product_id=product, color=color, size=size)
             response = JsonResponse({"repeat": search_count.quantity})
 
@@ -138,16 +138,19 @@ def sold_today(request):
         d = record[int(request.POST.get('number')) - 1]
         d.delete()
 
-    elif request.POST.get('submit'):
+    elif 'sell_submit' in request.POST:
         p = TodayRecord()
         p.product = All_Product.objects.get(product_id=request.POST.get('product'), color=request.POST.get('color'),
-                                            size=request.POST.get('size'))
+                                            size=Size.objects.get(name=request.POST.get('size')))
         p.sell_count = request.POST.get('count')
         p.base_price = p.product.price
         p.sell_price = request.POST.get('price')
         p.clerk = Clerk.objects.get(clerk_name=request.POST.get('clerk'))
         p.customer = request.POST.get('phone')
         p.save()
+
+    elif 'check_submit' in request.POST:
+        pass
 
     customer = Customer.objects.all()
     stock_products = All_Product.objects.exclude(quantity=0)
