@@ -1,16 +1,16 @@
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseRedirect
 from django.db import connection
 from django.contrib.auth.decorators import login_required
 from .models import All_Product, Clerk, Customer, Sales_Record, TodayRecord, TypeOf, Size
 from django.http import HttpResponse
 from django.contrib import auth  # 別忘了import auth
-from django.contrib.auth.models import User  #記得要先導入套件
+from django.contrib.auth.models import User  # 記得要先導入套件
 
 
 def login(request):
-    # if request.user.is_authenticated():
-    #     return HttpResponseRedirect('/')
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/')
 
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
@@ -147,10 +147,36 @@ def sold_today(request):
         p.sell_price = request.POST.get('price')
         p.clerk = Clerk.objects.get(clerk_name=request.POST.get('clerk'))
         p.customer = request.POST.get('phone')
+        p.remark = p.product.remarks
         p.save()
 
-    elif 'check_submit' in request.POST:
+    elif 'show_submit' in request.POST:
+        # 這裡寫退換貨
         pass
+
+    elif 'check_submit' in request.POST:
+        if request.user.is_authenticated:
+            today_records = TodayRecord.objects.all()
+            for t in today_records:
+                s = Sales_Record()
+                s.product = t.product
+                s.sell_count = t.sell_count
+                _ = Customer.objects.get_or_create(phone_number=t.customer)
+                customer = Customer.objects.get(phone_number=t.customer)
+                s.customer = customer
+                s.sell_price = t.sell_price
+                s.sale_date = request.POST.get('check_date')
+                s.clerk = t.clerk
+                s.remark = t.remark
+                s.save()
+
+                p = t.product
+                p.quantity -= t.sell_count
+                p.save()
+
+            TodayRecord.objects.all().delete()
+        else:
+            return redirect('/login/')
 
     customer = Customer.objects.all()
     stock_products = All_Product.objects.exclude(quantity=0)
@@ -209,4 +235,3 @@ def add_new(request):
         TypeOf.objects.get_or_create(type_of=request.POST['type_of'])
 
     return render(request, 'add new.html', context)
-

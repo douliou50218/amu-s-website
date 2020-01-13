@@ -68,11 +68,11 @@ Already Sold
                                         <td>{{ product.1 | default_if_none:"" }}</td>
                                         <td>{{ product.2 | default_if_none:"" }}</td>
                                         <td>{{ product.3 | default_if_none:"" }}</td>
-                                        <td>{{ product.4 | default_if_none:"" }}</td>
-                                        <td>{{ product.5 | date:'Y/m/d' }}</td>
+                                        <td>{{ product.4 | date:'Y/m/d' }}</td>
+                                        <td>{{ product.5 | default_if_none:"---" }}</td>
                                         <td>{{ product.6 | default_if_none:"" }}</td>
                                         {% if product.7 == -1000 %}
-                                            <td></td>
+                                            <td>---</td>
                                         {% else %}
                                             <td>{{ product.7 }}</td>
                                         {% endif %}

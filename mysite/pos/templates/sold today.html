@@ -137,37 +137,64 @@
 
                     <!-- Card Content - Collapse -->
                     <div class="collapse card-body" id="return" style="">
-                        <form class="validate-form" method="POST">
-                            {% csrf_token %}
-                            <div class="form-group row">
-                                <div class="col-lg-5">
-                                    <div class="row">
-                                        <label class="col-sm-2 col-lg-3 col-xl-2 col-form-label text-gray-900 text-lg">商品</label>
-                                        <!-- max='618107190088-1' -->
-                                        <div class="col-sm-8 col-lg-6 col-xl-8">
-                                            <input type="text" name="product" id="return_product" class="form-control"
-                                                   placeholder="MA HANG">
-                                        </div>
-                                        <div class="col-sm-2 col-lg-3 col-xl-2">
-                                            <input type="submit" name="submit" class="btn btn-primary" value="搜尋">
-                                        </div>
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <div class="row form-group">
+                                    <!-- max='618107190088-1' -->
+                                    <label for="return_product"
+                                           class="col-sm-2 col-lg-3 col-xl-2 col-form-label text-gray-900 text-lg">商品</label>
+                                    <div class="col-sm-8 col-lg-6 col-xl-8">
+                                        <input type="text" name="return_product" id="return_product"
+                                               class="form-control"
+                                               placeholder="MA HANG">
                                     </div>
-                                </div>
-                                <div class="col-lg-7">
-                                    <div class="row">
-                                        <label for=""
-                                               class="col-sm-3 col-lg-3 col-xl-2 col-form-label text-gray-900 text-lg">客人電話</label>
-                                        <div class="col-sm-7 col-lg-6 col-xl-8">
-                                            <input type="tel" name="phone" id="returnphone" class="form-control">
-                                        </div>
-                                        <div class="col-sm-2 col-lg-3 col-xl-2">
-                                            <input type="submit" name="submit" class="btn btn-primary" value="搜尋">
-                                        </div>
+                                    <div class="col-sm-2 col-lg-3 col-xl-2">
+                                        <input type="submit" id="pd_submit" class="btn btn-primary" value="搜尋"
+                                               data-toggle="modal"
+                                               data-target="#showModal">
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-7">
+                                <div class="row">
+                                    <label for="return_phone"
+                                           class="col-sm-3 col-lg-3 col-xl-2 col-form-label text-gray-900 text-lg">客人電話</label>
+                                    <div class="col-sm-7 col-lg-6 col-xl-8">
+                                        <input type="tel" name="return_phone" id="return_phone"
+                                               class="form-control">
+                                    </div>
+                                    <div class="col-sm-2 col-lg-3 col-xl-2">
+                                        <input type="submit" id="ph_submit" class="btn btn-primary" value="搜尋"
+                                               data-toggle="modal"
+                                               data-target="#showModal">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                        </form>
+                        <!-- Modal -->
+                        <div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModal"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title font-weight-bold">搜尋結果</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <input type="submit" name="show_submit" class="btn btn-primary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -206,6 +233,7 @@
                                 <th scope="col">PHONE</th>
                                 <th scope="col">店員</th>
                                 <th scope="col">總價</th>
+                                <th scope="col">備註</th>
                                 <th scope="col" class="text-danger" style="width: 3rem;">Xóa</th>
                             </tr>
                             </thead>
@@ -223,7 +251,8 @@
                                     <td>{{ i.customer | default_if_none:"" }}</td>
                                     <td>{{ i.clerk }}</td>
                                     <td>{{ i.sell_price | default_if_none:"" }}</td>
-                                    <td><a href="" name={{ n }} class="delete btn btn-danger btn-circle"><i
+                                    <td>{{ i.remark | default_if_none:"" }}</td>
+                                    <td><a href="" name={{ n }} id="delete" class="btn btn-danger btn-circle"><i
                                             class="fas fa-trash"></i></a></td>
                                 </tr>
                             {% endfor %}
@@ -279,7 +308,8 @@
 
         <div class="row mt-3 mr-0 mb-5 ml-0">
             <!-- Button trigger modal -->
-            <a href="" name="check_submit" class="col-12 btn btn-primary btn-icon-split btn-lg" data-toggle="modal" data-target="#checkModal">
+            <a href="" name="check_submit" class="col-12 btn btn-primary btn-icon-split btn-lg" data-toggle="modal"
+               data-target="#checkModal">
                 <span class="icon text-white-50">
                     <i class="fas fa-arrow-right"></i>
                 </span>
@@ -288,24 +318,33 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModal" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title font-weight-bold" id="checkModal">確認送出?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                ...
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
+        <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModal"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-weight-bold">確認送出?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="validate-form" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group row">
+                                <div class="col">
+                                    <label for="check_date" class="text-gray-900">日期:</label>
+                                    <input type="text" name="check_date" class="form-control" value="{% now 'Y-m-d' %}">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <input type="submit" name="check_submit" class="btn btn-primary">
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
 
 
@@ -313,6 +352,7 @@
 
     <script>$.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});</script>
     <script>
+
         /*=====================[ Validate ]=====================*/
         let $inputs = $('#sale input');
         $('#sale').on('submit', function (e) {
@@ -330,8 +370,8 @@
             return true;
         });
 
-         /*=====================當日商品刪除確認=====================*/
-        $('.delete').click(function (e) {
+        /*=====================當日商品刪除確認=====================*/
+        $('#delete').click(function (e) {
             let check = confirm("確定刪除嗎?");
             if (check) {
                 let $input = $(this);
@@ -350,17 +390,6 @@
                 return false;
             }
 
-            return true;
-        })
-
-        /*=====================確認送出=====================*/
-        $('a　#btn-icon-split').click(function (e) {
-            let check = confirm("確定刪除嗎?");
-            if (!check) {
-                e.preventDefault();
-                return false;
-
-            }
             return true;
         })
 
